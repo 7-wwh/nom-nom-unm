@@ -1,38 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nom-Nom Pathfinder - Home</title>
-  <style>
-    body { font-family: Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 0; }
-    header { background-color: #ff6f61; color: white; padding: 20px; text-align: center; }
-    main { padding: 20px; text-align: center; }
-    .button { 
-      background-color: #ff6f61; 
-      color: white; 
-      padding: 10px 20px; 
-      border: none; 
-      border-radius: 5px; 
-      cursor: pointer; 
-      margin: 10px; 
-      text-decoration: none; 
-      display: inline-block;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NomNom - Find Food You'll Love Nearby</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f7f7f7;
+        }
+        header {
+            background: #ff6b6b;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        section {
+            padding: 2rem;
+            max-width: 900px;
+            margin: auto;
+        }
+        .btn {
+            background: #ff6b6b;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .feature {
+            margin-top: 2rem;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            color: #888;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Nom-Nom Pathfinder</h1>
-    <p>Find the perfect food around you based on your cravings!</p>
-  </header>
-  <main>
+
+<header>
+    <h1>NomNom App</h1>
+    <p>Find Food You'll Love Near You Instantly</p>
+    <button class="btn" onclick="alert('Analyzing your cravings...')">What Should I Eat?</button>
+</header>
+
+<section>
     <h2>How It Works</h2>
-    <p>
-      Nom-Nom uses machine learning to analyze your preferences through images, links, and a short survey. Based on your input and past interactions, we recommend food options nearby.
-    </p>
-    <!-- Link to survey page -->
-    <a href="survey.html" class="button">What Should I Eat?</a>
-  </main>
+
+    <div class="feature">
+        <h3>Step 1: Know What You Like</h3>
+        <p>Our platform learns your food preferences using content analysis — upload photos, links, or share your favorite meals.</p>
+    </div>
+
+    <div class="feature">
+        <h3>Step 2: Quick Personal Survey</h3>
+        <p>Answer a 5-minute survey about your cravings today. We cross-check this with your previous likes and tastes.</p>
+    </div>
+
+    <div class="feature">
+        <h3>Step 3: Smart Food Recommendations</h3>
+        <p>NomNom suggests the best nearby meals based on your current mood, past favorites, and even surprises you with something you haven't had in a while!</p>
+    </div>
+
+    <div class="feature">
+        <h3>Step 4: Explore & Feedback</h3>
+        <p>Get restaurant locations, visit, and share feedback. Your reviews help us improve your future recommendations!</p>
+    </div>
+</section>
+
+<footer>
+    &copy; 2025 NomNom App. All Rights Reserved.
+</footer>
+
 </body>
 </html>
