@@ -1,87 +1,80 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rocketry Club - Join The Future</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>NomNom - Find Food You'll Love Nearby</title>
     <style>
-        * {
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
-        }
-        body {
-            background: #0f0f0f;
-            color: #fff;
+            background: #f7f7f7;
         }
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2rem 5%;
-        }
-        header h1 {
-            font-size: 2rem;
-            color: #fff;
-        }
-        nav a {
-            color: #ccc;
-            margin-left: 2rem;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .hero {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 10rem 5% 5rem;
-        }
-        .hero h2 {
-            font-size: 3rem;
-            font-weight: 700;
-            max-width: 700px;
-        }
-        .hero p {
-            margin-top: 1.5rem;
-            color: #aaa;
-            max-width: 600px;
-        }
-        .hero button {
-            margin-top: 2rem;
-            background: #ff4d00;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1rem;
+            background: #ff6b6b;
             color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        section {
+            padding: 2rem;
+            max-width: 900px;
+            margin: auto;
+        }
+        .btn {
+            background: #ff6b6b;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .feature {
+            margin-top: 2rem;
         }
         footer {
             text-align: center;
-            padding: 2rem 0;
-            color: #555;
+            padding: 1rem;
+            color: #888;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Rocketry Club</h1>
-        <nav>
-            <a href="#about">About</a>
-            <a href="#projects">Projects</a>
-            <a href="#join">Join Us</a>
-        </nav>
-    </header><section class="hero">
-    <h2>Building The Future Of Space Exploration</h2>
-    <p>We are a student-led rocketry club aiming to innovate, learn, and launch. Be part of a community that builds real rockets and works on cutting-edge aerospace projects.</p>
-    <button>Join The Team</button>
+
+<header>
+    <h1>NomNom App</h1>
+    <p>Find Food You'll Love Near You Instantly</p>
+    <button class="btn" onclick="alert('Analyzing your cravings...')">What Should I Eat?</button>
+</header>
+
+<section>
+    <h2>How It Works</h2>
+
+    <div class="feature">
+        <h3>Step 1: Know What You Like</h3>
+        <p>Our platform learns your food preferences using content analysis — upload photos, links, or share your favorite meals.</p>
+    </div>
+
+    <div class="feature">
+        <h3>Step 2: Quick Personal Survey</h3>
+        <p>Answer a 5-minute survey about your cravings today. We cross-check this with your previous likes and tastes.</p>
+    </div>
+
+    <div class="feature">
+        <h3>Step 3: Smart Food Recommendations</h3>
+        <p>NomNom suggests the best nearby meals based on your current mood, past favorites, and even surprises you with something you haven't had in a while!</p>
+    </div>
+
+    <div class="feature">
+        <h3>Step 4: Explore & Feedback</h3>
+        <p>Get restaurant locations, visit, and share feedback. Your reviews help us improve your future recommendations!</p>
+    </div>
 </section>
 
 <footer>
-    &copy; 2025 Rocketry Club. All rights reserved.
+    &copy; 2025 NomNom App. All Rights Reserved.
 </footer>
 
 </body>
