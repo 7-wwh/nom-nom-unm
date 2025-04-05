@@ -1,81 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NomNom - Find Food You'll Love Nearby</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f7f7f7;
-        }
-        header {
-            background: #ff6b6b;
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-        section {
-            padding: 2rem;
-            max-width: 900px;
-            margin: auto;
-        }
-        .btn {
-            background: #ff6b6b;
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        .feature {
-            margin-top: 2rem;
-        }
-        footer {
-            text-align: center;
-            padding: 1rem;
-            color: #888;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NomNom App - Find Your Next Meal</title>
+  <!-- Bootstrap CSS (optional, for grid and responsiveness) -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Icomoon Icons -->
+  <link rel="stylesheet" href="fonts/icomoon/icomoon.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    /* Header Navigation */
+    header {
+      background: #ff6b6b;
+      padding: 1rem 0;
+      color: #fff;
+    }
+    .navbar-brand img {
+      max-height: 50px;
+    }
+    .navbar-nav li a {
+      color: #fff;
+      margin-right: 1rem;
+      font-weight: bold;
+    }
+    /* Hero Section */
+    #billboard {
+      background: url('images/nomnom-banner.jpg') no-repeat center center/cover;
+      color: #fff;
+      padding: 8rem 0 4rem;
+      text-align: center;
+      position: relative;
+    }
+    #billboard .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+    }
+    #billboard .content {
+      position: relative;
+      z-index: 1;
+    }
+    #billboard h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    #billboard p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    #billboard .btn-main {
+      background: #ff4d00;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    /* How It Works Section */
+    .how-it-works {
+      padding: 4rem 0;
+      background: #fff;
+    }
+    .how-it-works .step {
+      text-align: center;
+      padding: 1rem;
+    }
+    .how-it-works .step h3 {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      color: #ff6b6b;
+    }
+    .how-it-works .step p {
+      font-size: 1rem;
+      color: #666;
+    }
+    /* Featured Recommendations */
+    .featured {
+      padding: 4rem 0;
+      background: #f0f0f0;
+    }
+    .featured .dish {
+      margin-bottom: 2rem;
+    }
+    .featured .dish img {
+      width: 100%;
+      border-radius: 5px;
+    }
+    .featured .dish h4 {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+    }
+    /* Footer */
+    footer {
+      background: #333;
+      color: #ccc;
+      padding: 2rem 0;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>NomNom App</h1>
-    <p>Find Food You'll Love Near You Instantly</p>
-    <button class="btn" onclick="alert('Analyzing your cravings...')">What Should I Eat?</button>
-</header>
-
-<section>
-    <h2>How It Works</h2>
-
-    <div class="feature">
-        <h3>Step 1: Know What You Like</h3>
-        <p>Our platform learns your food preferences using content analysis — upload photos, links, or share your favorite meals.</p>
+  <!-- Header & Navigation -->
+  <header id="header-wrap">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="index.html">
+          <img src="images/logo.png" alt="NomNom Logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nomnom-navbar" aria-controls="nomnom-navbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="icon icon-navicon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nomnom-navbar">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active"><a href="index.html" class="nav-link">HOME</a></li>
+            <li class="nav-item"><a href="#how-it-works" class="nav-link">HOW IT WORKS</a></li>
+            <li class="nav-item"><a href="#recommendations" class="nav-link">RECOMMENDATIONS</a></li>
+            <li class="nav-item"><a href="#contact" class="nav-link">CONTACT</a></li>
+          </ul>
+        </div>
+      </nav>
     </div>
+  </header>
 
-    <div class="feature">
-        <h3>Step 2: Quick Personal Survey</h3>
-        <p>Answer a 5-minute survey about your cravings today. We cross-check this with your previous likes and tastes.</p>
+  <!-- Hero / Billboard Section -->
+  <section id="billboard">
+    <div class="overlay"></div>
+    <div class="container content">
+      <h1>Welcome to NomNom</h1>
+      <p>Your personal food guide – discover meals you love near you!</p>
+      <button class="btn-main" onclick="alert('Analyzing your cravings...')">What Should I Eat?</button>
     </div>
+  </section>
 
-    <div class="feature">
-        <h3>Step 3: Smart Food Recommendations</h3>
-        <p>NomNom suggests the best nearby meals based on your current mood, past favorites, and even surprises you with something you haven't had in a while!</p>
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="how-it-works">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 step">
+          <img src="images/step1.png" alt="Analyze Content" class="img-fluid">
+          <h3>Personalize</h3>
+          <p>Upload photos, share links, or tell us what you love. Our system learns your taste.</p>
+        </div>
+        <div class="col-md-3 step">
+          <img src="images/step2.png" alt="Quick Survey" class="img-fluid">
+          <h3>Survey</h3>
+          <p>A quick 5-minute survey helps us capture your current cravings.</p>
+        </div>
+        <div class="col-md-3 step">
+          <img src="images/step3.png" alt="Smart Recommendations" class="img-fluid">
+          <h3>Recommend</h3>
+          <p>We combine your taste history with real-time cravings to suggest the perfect dish.</p>
+        </div>
+        <div class="col-md-3 step">
+          <img src="images/step4.png" alt="Feedback" class="img-fluid">
+          <h3>Feedback</h3>
+          <p>After dining, share your experience. Your feedback refines our future recommendations.</p>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <div class="feature">
-        <h3>Step 4: Explore & Feedback</h3>
-        <p>Get restaurant locations, visit, and share feedback. Your reviews help us improve your future recommendations!</p>
+  <!-- Featured Recommendations Section -->
+  <section id="recommendations" class="featured">
+    <div class="container">
+      <h2 class="text-center" style="color:#ff6b6b; margin-bottom: 2rem;">Featured Recommendations</h2>
+      <div class="row">
+        <div class="col-md-4 dish">
+          <img src="images/dish1.jpg" alt="Dish 1">
+          <h4>Italian Fresh Salad</h4>
+          <p>A vibrant mix of tomatoes, onions, and feta cheese near you.</p>
+        </div>
+        <div class="col-md-4 dish">
+          <img src="images/dish2.jpg" alt="Dish 2">
+          <h4>Blueberry Ice-Choco</h4>
+          <p>A delightful dessert to satisfy your sweet tooth.</p>
+        </div>
+        <div class="col-md-4 dish">
+          <img src="images/dish3.jpg" alt="Dish 3">
+          <h4>Spicy Thai Noodles</h4>
+          <p>Experience the heat with our authentic Thai twist.</p>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<footer>
-    &copy; 2025 NomNom App. All Rights Reserved.
-</footer>
+  <!-- Footer Section -->
+  <footer id="contact">
+    <div class="container">
+      <p>© 2025 NomNom App. All Rights Reserved.</p>
+      <p>
+        <a href="mailto:support@nomnomapp.com" style="color:#ccc; text-decoration: none;">support@nomnomapp.com</a>
+      </p>
+      <div class="social-icon">
+        <a href="https://facebook.com" style="color:#ccc; margin-right: 1rem;"><i class="icon icon-facebook"></i></a>
+        <a href="https://twitter.com" style="color:#ccc; margin-right: 1rem;"><i class="icon icon-twitter"></i></a>
+        <a href="https://instagram.com" style="color:#ccc;"><i class="icon icon-instagram"></i></a>
+      </div>
+    </div>
+  </footer>
 
+  <!-- Optional JavaScript files -->
+  <script src="js/jquery-1.11.0.min.js"></script>
+  <script src="bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
