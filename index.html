@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NomNom App - Find Your Next Meal</title>
+  <!-- Google Fonts: Creepster for a drippy, sensational logo -->
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
   <!-- Bootstrap CSS (optional, for grid and responsiveness) -->
-  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <!-- Icomoon Icons -->
-  <link rel="stylesheet" href="fonts/icomoon/icomoon.css">
+  <link rel="stylesheet" href="fonts/icomoon/icomoon.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -25,13 +27,33 @@
       padding: 1rem 0;
       color: #fff;
     }
-    .navbar-brand img {
-      max-height: 50px;
+    .navbar {
+      position: relative;
+    }
+    /* Logo as text using Creepster font */
+    .navbar-brand {
+      font-family: 'Creepster', cursive;
+      font-size: 2rem;
+      color: #fff;
+      text-decoration: none;
+    }
+    .navbar-brand:hover {
+      color: #ffdd57;
     }
     .navbar-nav li a {
       color: #fff;
       margin-right: 1rem;
       font-weight: bold;
+    }
+    /* Sign In Icon */
+    .signin-icon {
+      font-size: 1.5rem;
+      color: #fff;
+      cursor: pointer;
+      margin-left: auto;
+    }
+    .signin-icon:hover {
+      color: #ffdd57;
     }
     /* Hero Section */
     #billboard {
@@ -47,7 +69,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
     }
     #billboard .content {
       position: relative;
@@ -114,17 +136,25 @@
   </style>
 </head>
 <body>
-
   <!-- Header & Navigation -->
   <header id="header-wrap">
     <div class="container">
       <nav class="navbar navbar-expand-lg">
-        <a class="navbar-brand" href="index.html">
-          <img src="images/logo.png" alt="NomNom Logo">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nomnom-navbar" aria-controls="nomnom-navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <!-- Logo as text with drippy font -->
+        <a class="navbar-brand" href="index.html">NomNom</a>
+        <!-- Hamburger menu button -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#nomnom-navbar"
+          aria-controls="nomnom-navbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
           <span class="icon icon-navicon"></span>
         </button>
+        <!-- Navigation Links and Sign In Icon -->
         <div class="collapse navbar-collapse" id="nomnom-navbar">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active"><a href="index.html" class="nav-link">HOME</a></li>
@@ -132,6 +162,10 @@
             <li class="nav-item"><a href="#recommendations" class="nav-link">RECOMMENDATIONS</a></li>
             <li class="nav-item"><a href="#contact" class="nav-link">CONTACT</a></li>
           </ul>
+          <!-- Sign In Icon -->
+          <div class="signin-icon" onclick="window.location.href='signin.html'">
+            <span class="icon icon-user"></span>
+          </div>
         </div>
       </nav>
     </div>
@@ -152,22 +186,22 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3 step">
-          <img src="images/step1.png" alt="Analyze Content" class="img-fluid">
+          <img src="images/step1.png" alt="Personalize" class="img-fluid" />
           <h3>Personalize</h3>
           <p>Upload photos, share links, or tell us what you love. Our system learns your taste.</p>
         </div>
         <div class="col-md-3 step">
-          <img src="images/step2.png" alt="Quick Survey" class="img-fluid">
+          <img src="images/step2.png" alt="Survey" class="img-fluid" />
           <h3>Survey</h3>
           <p>A quick 5-minute survey helps us capture your current cravings.</p>
         </div>
         <div class="col-md-3 step">
-          <img src="images/step3.png" alt="Smart Recommendations" class="img-fluid">
+          <img src="images/step3.png" alt="Recommend" class="img-fluid" />
           <h3>Recommend</h3>
           <p>We combine your taste history with real-time cravings to suggest the perfect dish.</p>
         </div>
         <div class="col-md-3 step">
-          <img src="images/step4.png" alt="Feedback" class="img-fluid">
+          <img src="images/step4.png" alt="Feedback" class="img-fluid" />
           <h3>Feedback</h3>
           <p>After dining, share your experience. Your feedback refines our future recommendations.</p>
         </div>
@@ -178,20 +212,20 @@
   <!-- Featured Recommendations Section -->
   <section id="recommendations" class="featured">
     <div class="container">
-      <h2 class="text-center" style="color:#ff6b6b; margin-bottom: 2rem;">Featured Recommendations</h2>
+      <h2 class="text-center" style="color: #ff6b6b; margin-bottom: 2rem;">Featured Recommendations</h2>
       <div class="row">
         <div class="col-md-4 dish">
-          <img src="images/dish1.jpg" alt="Dish 1">
+          <img src="images/dish1.jpg" alt="Italian Fresh Salad" />
           <h4>Italian Fresh Salad</h4>
           <p>A vibrant mix of tomatoes, onions, and feta cheese near you.</p>
         </div>
         <div class="col-md-4 dish">
-          <img src="images/dish2.jpg" alt="Dish 2">
+          <img src="images/dish2.jpg" alt="Blueberry Ice-Choco" />
           <h4>Blueberry Ice-Choco</h4>
           <p>A delightful dessert to satisfy your sweet tooth.</p>
         </div>
         <div class="col-md-4 dish">
-          <img src="images/dish3.jpg" alt="Dish 3">
+          <img src="images/dish3.jpg" alt="Spicy Thai Noodles" />
           <h4>Spicy Thai Noodles</h4>
           <p>Experience the heat with our authentic Thai twist.</p>
         </div>
