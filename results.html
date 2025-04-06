@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NomNom - Your Personalized Recommendations</title>
+  <title>NomNom - Your Personalized Restaurant Recommendations</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <style>
@@ -15,7 +15,9 @@
       --dark-color: #292f36;
       --light-color: #f7fff7;
       --accent-color: #4ecdc4;
+      --gray-color: #6c757d;
       --gray-light: #f8f9fa;
+      --white: #ffffff;
       --shadow-sm: 0 2px 5px rgba(0,0,0,0.1);
       --shadow-md: 0 5px 15px rgba(0,0,0,0.1);
       --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
@@ -38,6 +40,27 @@
       margin: 0 auto;
       padding: 0 20px;
     }
+    h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      color: var(--dark-color);
+    }
+    h3 {
+      font-size: 1.8rem;
+      color: var(--primary-dark);
+      position: relative;
+      padding-bottom: 10px;
+    }
+    h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--secondary-color);
+    }
     /* Header & Navigation */
     header {
       background-color: rgba(255,255,255,0.98);
@@ -46,6 +69,9 @@
       width: 100%;
       z-index: 100;
       transition: var(--transition);
+    }
+    header.scrolled {
+      box-shadow: var(--shadow-md);
     }
     nav {
       display: flex;
@@ -59,10 +85,13 @@
       color: var(--primary-color);
       display: flex;
       align-items: center;
+      text-decoration: none;
     }
-    .logo span {
-      color: #ffd166; /* Yellow color for 'Nom' */
-      font-weight: bold;
+    .logo span:first-of-type {
+      color: var(--primary-color);
+    }
+    .logo span:last-of-type {
+      color: var(--secondary-color); /* Yellow color for the second "Nom" */
     }
     .logo i {
       margin-right: 8px;
@@ -83,54 +112,232 @@
     .nav-links a:hover {
       color: var(--primary-color);
     }
-    /* Main Content Area */
-    main {
-      padding: 150px 0 100px;
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary-color);
+      transition: var(--transition);
     }
-    .preferences {
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 21px;
+      cursor: pointer;
+    }
+    .menu-toggle span {
+      height: 3px;
+      width: 100%;
+      background-color: var(--dark-color);
+      transition: var(--transition);
+    }
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/api/placeholder/1200/400');
+      background-size: cover;
+      background-position: center;
+      color: white;
       text-align: center;
-      margin-bottom: 30px;
+      padding: 120px 20px 60px;
+      margin-bottom: 40px;
+      border-radius: 0 0 10px 10px;
     }
-    .preferences h2 {
-      margin-bottom: 20px;
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      animation: fadeInDown 1s;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      animation: fadeIn 1.5s;
+    }
+    /* Preferences Section */
+    .preferences {
+      background-color: var(--white);
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      animation: fadeIn 1s;
+    }
+    .preferences-display {
+      display: inline-flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .preference-tag {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .preference-tag i {
+      margin-right: 8px;
+    }
+    /* Recommendations Section */
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
     }
     .recommendations {
-      margin-top: 30px;
-    }
-    .recommendations h3 {
-      margin-bottom: 20px;
-      text-align: center;
+      background-color: var(--white);
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      padding: 30px;
+      margin-bottom: 40px;
     }
     .recommendation-list {
-      display: flex;
-      overflow-x: auto;
-      gap: 20px;
-      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
     }
     .recommendation-item {
-      min-width: 200px;
       background-color: var(--white);
-      border-radius: 8px;
+      border-radius: 10px;
       box-shadow: var(--shadow-sm);
-      padding: 15px;
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+    }
+    .recommendation-item:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    .recommendation-img {
+      height: 180px;
+      overflow: hidden;
+      position: relative;
+    }
+    .recommendation-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+    .recommendation-item:hover .recommendation-img img {
+      transform: scale(1.1);
+    }
+    .cuisine-tag {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: var(--secondary-color);
+      color: var(--dark-color);
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    .recommendation-content {
+      padding: 20px;
+    }
+    .recommendation-content h4 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      color: var(--dark-color);
+    }
+    .feature-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+    .feature-item {
+      font-size: 0.85rem;
+      color: var(--gray-color);
+      display: flex;
+      align-items: center;
+      margin-right: 10px;
+    }
+    .feature-item i {
+      color: var(--accent-color);
+      margin-right: 5px;
+    }
+    .recommendation-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 15px;
+      border-top: 1px solid var(--gray-light);
+    }
+    .rating {
+      display: flex;
+      align-items: center;
+      color: var(--gray-color);
+    }
+    .rating i {
+      color: var(--secondary-color);
+      margin-right: 5px;
+    }
+    .view-btn {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    .view-btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    /* How It Works Section */
+    .how-it-works {
+      padding: 60px 0;
       text-align: center;
     }
-    .recommendation-item img {
-      width: 100%;
-      border-radius: 8px;
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
     }
-    .recommendation-item h4 {
-      margin: 15px 0 10px;
-      font-size: 1.2rem;
+    .step {
+      padding: 30px;
+      background-color: var(--white);
+      border-radius: 10px;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
     }
-    .recommendation-item p {
+    .step:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+    }
+    .step-icon {
+      background-color: var(--primary-color);
+      color: white;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 20px;
+    }
+    .step h4 {
+      font-size: 1.3rem;
       margin-bottom: 15px;
-      color: var(--gray-light);
-    }
-    .recommendation-item a {
-      text-decoration: none;
-      color: var(--primary-color);
-      font-weight: 500;
     }
     /* Footer */
     footer {
@@ -160,6 +367,17 @@
       font-weight: bold;
       color: var(--primary-color);
       margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+    .footer-logo i {
+      margin-right: 8px;
+    }
+    .footer-logo span:first-of-type {
+      color: var(--primary-color);
+    }
+    .footer-logo span:last-of-type {
+      color: var(--secondary-color);
     }
     .footer-links {
       list-style: none;
@@ -175,6 +393,42 @@
     .footer-links a:hover {
       color: var(--primary-color);
     }
+    .footer-column h3 {
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+    }
+    .footer-column h3::after {
+      left: 0;
+      transform: none;
+      width: 50px;
+    }
+    .footer-column p {
+      color: #ddd;
+      font-size: 0.95rem;
+      margin-bottom: 15px;
+    }
+    .footer-column .social-links {
+      display: flex;
+      gap: 15px;
+    }
+    .footer-column .social-icon {
+      font-size: 1.3rem;
+      color: #ddd;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,0.1);
+    }
+    .footer-column .social-icon:hover {
+      color: var(--white);
+      background-color: var(--primary-color);
+      transform: translateY(-3px);
+    }
     .copyright {
       text-align: center;
       padding-top: 20px;
@@ -182,28 +436,51 @@
       font-size: 0.9rem;
       color: #ddd;
     }
+    /* Responsive Styles */
     @media (max-width: 768px) {
-      .nav-links {
-        display: none;
+      .menu-toggle {
+        display: flex;
       }
-      main {
-        padding: 120px 0 80px;
+      .nav-links {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+        background-color: var(--white);
+        box-shadow: var(--shadow-md);
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      .nav-links.active {
+        max-height: 300px;
+      }
+      .nav-links a {
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--gray-light);
+        width: 100%;
+        text-align: center;
       }
       .recommendation-list {
-        flex-direction: column;
-        align-items: center;
+        grid-template-columns: 1fr;
+      }
+      .steps {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
   <!-- Header & Navigation -->
-  <header>
+  <header id="header">
     <div class="container">
       <nav>
-        <div class="logo">
-          <i class="fa-solid fa-burger"></i> <span>Nom</span>Nom
-        </div>
+        <a href="index.html" class="logo">
+          <i class="fa-solid fa-burger"></i><span>Nom</span><span>Nom</span>
+        </a>
         <div class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
           <span></span>
           <span></span>
@@ -213,57 +490,192 @@
           <a href="index.html">Home</a>
           <a href="#preferences">My Preferences</a>
           <a href="#recommendations">Recommendations</a>
-          <a href="#howitworks">How It Works</a>
+          <a href="#how-it-works">How It Works</a>
           <a href="#contact">Contact</a>
         </div>
       </nav>
     </div>
   </header>
 
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>Discover Your Perfect Meal</h1>
+      <p>NomNom uses AI to match your taste preferences with the best local restaurants. Here are your personalized recommendations!</p>
+    </div>
+  </section>
+
   <!-- Main Content Area -->
   <main>
     <div class="container">
-      <div class="preferences">
-        <h2>Your Personalized Restaurant Recommendations</h2>
-        <p>Looks like you've chosen the following preferences:</p>
-        <p id="preferences-display">Loading preferences...</p>
-      </div>
+      <!-- Preferences Section -->
+      <section id="preferences" class="preferences">
+        <h2>Your Personalized Preferences</h2>
+        <p>Based on your selections, we've found the perfect restaurants for you:</p>
+        <div id="preferences-display" class="preferences-display">
+          <!-- Will be populated by JavaScript -->
+        </div>
+      </section>
 
-      <div class="recommendations">
-        <h3>Restaurant Recommendations</h3>
+      <!-- Recommendations Section -->
+      <section id="recommendations" class="recommendations">
+        <div class="section-title">
+          <h3>Top Restaurant Recommendations</h3>
+          <p>Curated just for you based on your taste preferences</p>
+        </div>
         <div class="recommendation-list">
+          <!-- Restaurant 1 -->
           <div class="recommendation-item">
-            <img src="restaurant1.jpg" alt="Restaurant 1">
-            <h4>Restaurant 1</h4>
-            <p>Italian, Pizza, Pasta</p>
-            <a href="A.html">View Details</a>
+            <div class="recommendation-img">
+              <img src="/api/placeholder/400/300" alt="La Trattoria">
+              <span class="cuisine-tag">Italian</span>
+            </div>
+            <div class="recommendation-content">
+              <h4>La Trattoria</h4>
+              <div class="feature-list">
+                <span class="feature-item"><i class="fa-solid fa-utensils"></i> Italian</span>
+                <span class="feature-item"><i class="fa-solid fa-pizza-slice"></i> Pizza</span>
+                <span class="feature-item"><i class="fa-solid fa-leaf"></i> Veg Options</span>
+              </div>
+              <p>Authentic Italian cuisine in a cozy family-run restaurant. Their homemade pasta and wood-fired pizzas are the local favorites.</p>
+              <div class="recommendation-footer">
+                <div class="rating">
+                  <i class="fa-solid fa-star"></i>
+                  <span>4.8 (234 reviews)</span>
+                </div>
+                <a href="A.html" class="view-btn">View Details</a>
+              </div>
+            </div>
           </div>
+
+          <!-- Restaurant 2 -->
           <div class="recommendation-item">
-            <img src="restaurant2.jpg" alt="Restaurant 2">
-            <h4>Restaurant 2</h4>
-            <p>Sushi, Japanese</p>
-            <a href="B.html">View Details</a>
+            <div class="recommendation-img">
+              <img src="/api/placeholder/400/300" alt="Sakura Sushi">
+              <span class="cuisine-tag">Japanese</span>
+            </div>
+            <div class="recommendation-content">
+              <h4>Sakura Sushi</h4>
+              <div class="feature-list">
+                <span class="feature-item"><i class="fa-solid fa-utensils"></i> Japanese</span>
+                <span class="feature-item"><i class="fa-solid fa-fish"></i> Sushi</span>
+                <span class="feature-item"><i class="fa-solid fa-champagne-glasses"></i> Sake Bar</span>
+              </div>
+              <p>Premium Japanese dining with a focus on fresh, sustainable seafood. Their chef's special rolls and sake selection are unmatched.</p>
+              <div class="recommendation-footer">
+                <div class="rating">
+                  <i class="fa-solid fa-star"></i>
+                  <span>4.7 (189 reviews)</span>
+                </div>
+                <a href="B.html" class="view-btn">View Details</a>
+              </div>
+            </div>
           </div>
+
+          <!-- Restaurant 3 -->
           <div class="recommendation-item">
-            <img src="restaurant3.jpg" alt="Restaurant 3">
-            <h4>Restaurant 3</h4>
-            <p>Burgers, American</p>
-            <a href="C.html">View Details</a>
+            <div class="recommendation-img">
+              <img src="/api/placeholder/400/300" alt="Burger Joint">
+              <span class="cuisine-tag">American</span>
+            </div>
+            <div class="recommendation-content">
+              <h4>Burger Joint</h4>
+              <div class="feature-list">
+                <span class="feature-item"><i class="fa-solid fa-utensils"></i> American</span>
+                <span class="feature-item"><i class="fa-solid fa-burger"></i> Burgers</span>
+                <span class="feature-item"><i class="fa-solid fa-beer-mug-empty"></i> Craft Beer</span>
+              </div>
+              <p>Gourmet burgers made with locally sourced ingredients. Their signature truffle fries and craft beer selection are must-tries.</p>
+              <div class="recommendation-footer">
+                <div class="rating">
+                  <i class="fa-solid fa-star"></i>
+                  <span>4.6 (312 reviews)</span>
+                </div>
+                <a href="C.html" class="view-btn">View Details</a>
+              </div>
+            </div>
           </div>
+
+          <!-- Restaurant 4 -->
           <div class="recommendation-item">
-            <img src="restaurant4.jpg" alt="Restaurant 4">
-            <h4>Restaurant 4</h4>
-            <p>Mexican, Tacos</p>
-            <a href="D.html">View Details</a>
+            <div class="recommendation-img">
+              <img src="/api/placeholder/400/300" alt="Taco Fiesta">
+              <span class="cuisine-tag">Mexican</span>
+            </div>
+            <div class="recommendation-content">
+              <h4>Taco Fiesta</h4>
+              <div class="feature-list">
+                <span class="feature-item"><i class="fa-solid fa-utensils"></i> Mexican</span>
+                <span class="feature-item"><i class="fa-solid fa-pepper-hot"></i> Spicy</span>
+                <span class="feature-item"><i class="fa-solid fa-margarita-glass"></i> Margaritas</span>
+              </div>
+              <p>Authentic Mexican street food with a modern twist. Known for their handmade tortillas and impressive tequila selection.</p>
+              <div class="recommendation-footer">
+                <div class="rating">
+                  <i class="fa-solid fa-star"></i>
+                  <span>4.5 (276 reviews)</span>
+                </div>
+                <a href="D.html" class="view-btn">View Details</a>
+              </div>
+            </div>
           </div>
+
+          <!-- Restaurant 5 -->
           <div class="recommendation-item">
-            <img src="restaurant5.jpg" alt="Restaurant 5">
-            <h4>Restaurant 5</h4>
-            <p>French, Fine Dining</p>
-            <a href="E.html">View Details</a>
+            <div class="recommendation-img">
+              <img src="/api/placeholder/400/300" alt="Le Petit Bistro">
+              <span class="cuisine-tag">French</span>
+            </div>
+            <div class="recommendation-content">
+              <h4>Le Petit Bistro</h4>
+              <div class="feature-list">
+                <span class="feature-item"><i class="fa-solid fa-utensils"></i> French</span>
+                <span class="feature-item"><i class="fa-solid fa-wine-glass"></i> Fine Dining</span>
+                <span class="feature-item"><i class="fa-solid fa-award"></i> Michelin</span>
+              </div>
+              <p>Elegant French cuisine in an intimate setting. Their seasonal tasting menu and extensive wine list create an unforgettable dining experience.</p>
+              <div class="recommendation-footer">
+                <div class="rating">
+                  <i class="fa-solid fa-star"></i>
+                  <span>4.9 (158 reviews)</span>
+                </div>
+                <a href="E.html" class="view-btn">View Details</a>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <!-- How It Works Section -->
+      <section id="how-it-works" class="how-it-works">
+        <div class="section-title">
+          <h3>How NomNom Works</h3>
+          <p>Discover the perfect restaurants in just three simple steps</p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-icon">
+              <i class="fa-solid fa-sliders"></i>
+            </div>
+            <h4>Share Your Preferences</h4>
+            <p>Tell us about your taste preferences, dietary restrictions, and cuisine favorites.</p>
+          </div>
+          <div class="step">
+            <div class="step-icon">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <h4>AI Recommendation</h4>
+            <p>Our AI analyzes thousands of restaurants to find perfect matches for your unique taste.</p>
+          </div>
+          <div class="step">
+            <div class="step-icon">
+              <i class="fa-solid fa-utensils"></i>
+            </div>
+            <h4>Enjoy Your Meal</h4>
+            <p>Discover new favorite spots and dishes tailored just for you!</p>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -273,22 +685,24 @@
       <div class="footer-content">
         <div class="footer-column">
           <div class="footer-logo">
-            <i class="fa-solid fa-burger"></i> <span>Nom</span>Nom
+            <i class="fa-solid fa-burger"></i><span>Nom</span><span>Nom</span>
           </div>
-          <p class="footer-about">NomNom is your personal food discovery platform that uses AI to serve you the best local dishes based on your tastes.</p>
+          <p class="footer-about">NomNom is your personal food discovery platform that uses AI to serve you the best local dishes based on your unique tastes and preferences.</p>
           <div class="social-links">
             <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
             <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
           </div>
         </div>
         <div class="footer-column">
           <h3>About NomNom</h3>
           <ul class="footer-links">
             <li><a href="#">Our Story</a></li>
-            <li><a href="#">How It Works</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
             <li><a href="#">Meet the Team</a></li>
             <li><a href="#">Careers</a></li>
+            <li><a href="#">Press Kit</a></li>
           </ul>
         </div>
         <div class="footer-column">
@@ -298,6 +712,7 @@
             <li><a href="#">User Guide</a></li>
             <li><a href="#">FAQs</a></li>
             <li><a href="#">Contact Support</a></li>
+            <li><a href="#">Restaurant Partners</a></li>
           </ul>
         </div>
         <div class="footer-column">
@@ -306,6 +721,8 @@
             <li><a href="#">Terms of Service</a></li>
             <li><a href="#">Privacy Policy</a></li>
             <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Accessibility</a></li>
+            <li><a href="#">Data Usage</a></li>
           </ul>
         </div>
       </div>
@@ -318,14 +735,45 @@
   <script>
     // Get URL parameters
     const urlParams = new URLSearchParams(window.location.search);
-    const cuisine = urlParams.get('cuisine');
-    const taste = urlParams.get('taste');
-    const diet = urlParams.get('diet');
-    const spice = urlParams.get('spice');
+    const cuisine = urlParams.get('cuisine') || 'Italian';
+    const taste = urlParams.get('taste') || 'Savory';
+    const diet = urlParams.get('diet') || 'No Restrictions';
+    const spice = urlParams.get('spice') || 'Medium';
 
-    // Display the preferences in the HTML
+    // Display the preferences in the HTML with icons
     const preferencesDisplay = document.getElementById('preferences-display');
-    preferencesDisplay.innerHTML = `Cuisine: ${cuisine || 'Not selected'}, Taste: ${taste || 'Not selected'}, Diet: ${diet || 'Not selected'}, Spice: ${spice || 'Not selected'}`;
+    
+    // Create preference tags with appropriate icons
+    const cuisineTag = document.createElement('div');
+    cuisineTag.className = 'preference-tag';
+    cuisineTag.innerHTML = `<i class="fa-solid fa-utensils"></i> Cuisine: ${cuisine}`;
+    
+    const tasteTag = document.createElement('div');
+    tasteTag.className = 'preference-tag';
+    tasteTag.innerHTML = `<i class="fa-solid fa-tongue"></i> Taste: ${taste}`;
+    
+    const dietTag = document.createElement('div');
+    dietTag.className = 'preference-tag';
+    dietTag.innerHTML = `<i class="fa-solid fa-carrot"></i> Diet: ${diet}`;
+    
+    const spiceTag = document.createElement('div');
+    spiceTag.className = 'preference-tag';
+    spiceTag.innerHTML = `<i class="fa-solid fa-pepper-hot"></i> Spice: ${spice}`;
+    
+    preferencesDisplay.appendChild(cuisineTag);
+    preferencesDisplay.appendChild(tasteTag);
+    preferencesDisplay.appendChild(dietTag);
+    preferencesDisplay.appendChild(spiceTag);
+
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
   </script>
 </body>
 </html>
