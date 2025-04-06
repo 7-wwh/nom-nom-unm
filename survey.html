@@ -902,106 +902,271 @@
       </div>
     </div>
   </footer>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // HELLO ANIMATION
-      const helloText = document.getElementById("helloText");
-      helloText.classList.add("animate__bounceIn");
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // --- DOM Elements ---
+    const helloOverlay = document.getElementById("hello-overlay");
+    const logoLarge = document.getElementById("logoLarge");
+    const helloText = document.getElementById("helloText");
+    const helloSubtext = document.getElementById("helloSubtext");
+
+    const loadingOverlay = document.getElementById("loading-overlay");
+    const loadingMessage = document.getElementById("loadingMessage");
+    const loadingProgressBar = document.getElementById("loadingProgressBar");
+    const loadingProgressText = document.getElementById("loadingProgressText");
+
+    const surveyContainer = document.getElementById("survey-container");
+    const surveyForm = document.getElementById("surveyForm");
+    const surveyProgress = document.getElementById("surveyProgress");
+    const currentQuestionSpan = document.getElementById("currentQuestion");
+    const completionPercentSpan = document.getElementById("completionPercent");
+    const mealTypeHeaderSpan = document.getElementById("mealTypeHeader");
+    const mealTypeTextSpans = document.querySelectorAll("#mealTypeText"); // Get all spans needing meal type text
+    const submitButton = document.getElementById("submitSurvey");
+    const resultsPreview = document.getElementById("resultsPreview");
+    const selectedPreferencesDiv = document.getElementById("selectedPreferences");
+
+    const questionGroups = document.querySelectorAll(".survey-question .button-group");
+    const totalQuestions = questionGroups.length;
+
+    const footer = document.querySelector("footer");
+
+    // --- State ---
+    const userSelections = {
+      spice: null,
+      cuisine: null,
+      taste: null,
+      diet: null
+    };
+
+    // --- Helper Functions ---
+    function getMealType() {
+      const hour = new Date().getHours();
+      if (hour >= 5 && hour < 11) return "Breakfast"; // Adjusted morning
+      if (hour >= 11 && hour < 14) return "Lunch";    // Lunch
+      if (hour >= 14 && hour < 17) return "Snack";    // Afternoon Snack
+      if (hour >= 17 && hour < 21) return "Dinner";   // Dinner
+      return "Supper"; // Late night
+    }
+
+    function updateProgress() {
+        let answeredQuestions = 0;
+        for (const key in userSelections) {
+            if (userSelections[key]) {
+                answeredQuestions++;
+            }
+        }
+        const percent = Math.round((answeredQuestions / totalQuestions) * 100);
+
+        surveyProgress.style.width = `${percent}%`;
+        currentQuestionSpan.textContent = answeredQuestions; // Or could track the *current* focused question
+        completionPercentSpan.textContent = percent;
+
+        // Enable submit button only when all questions are answered
+        submitButton.disabled = answeredQuestions !== totalQuestions;
+        submitButton.style.opacity = submitButton.disabled ? 0.6 : 1;
+        submitButton.style.cursor = submitButton.disabled ? 'not-allowed' : 'pointer';
+
+        updateResultsPreview(); // Update preview whenever progress changes
+    }
+
+
+    function updateResultsPreview() {
+        selectedPreferencesDiv.innerHTML = ''; // Clear previous badges
+        let hasSelection = false;
+
+        // Define icons for each category (optional, but nice)
+        const categoryIcons = {
+            spice: 'fa-solid fa-pepper-hot',
+            cuisine: 'fa-solid fa-earth-asia',
+            taste: 'fa-solid fa-cookie-bite',
+            diet: 'fa-solid fa-carrot'
+        };
+
+        for (const key in userSelections) {
+            if (userSelections[key]) {
+                hasSelection = true;
+                const badge = document.createElement('div');
+                badge.classList.add('result-badge');
+                const iconClass = categoryIcons[key] || 'fa-solid fa-check'; // Default icon
+                badge.innerHTML = `<i class="${iconClass}"></i> ${userSelections[key]}`;
+                selectedPreferencesDiv.appendChild(badge);
+            }
+        }
+
+        // Show or hide the preview section
+        resultsPreview.style.display = hasSelection ? 'block' : 'none';
+    }
+
+
+    function handleOptionClick(event) {
+        const button = event.target.closest('.option-button');
+        if (!button) return; // Exit if click wasn't on a button
+
+        const parentGroup = button.closest('.button-group');
+        const questionKey = parentGroup.id.replace('Options', ''); // e.g., 'spicy', 'cuisine'
+
+        // Remove 'selected' from siblings in the same group
+        parentGroup.querySelectorAll('.option-button').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+
+        // Add 'selected' to the clicked button
+        button.classList.add('selected');
+
+        // Store the selection (using data attribute)
+        const selectedValue = button.dataset.spice || button.dataset.cuisine || button.dataset.taste || button.dataset.diet;
+        userSelections[questionKey] = selectedValue;
+
+        // Update progress and preview
+        updateProgress();
+    }
+
+    // --- Initial Setup & Flow ---
+
+    // 1. Hello Animation
+    function startHelloAnimation() {
+      logoLarge.style.opacity = 1;
       helloText.style.opacity = 1;
-      
-      // After 3 seconds, transition out the hello overlay and start loading sequence
+      helloSubtext.style.opacity = 1;
+      logoLarge.classList.add("animate__zoomIn");
+      helloText.classList.add("animate__bounceIn");
+      helloSubtext.classList.add("animate__fadeInUp");
+
+      // After 3 seconds, transition out
       setTimeout(() => {
-        helloText.classList.remove("animate__bounceIn");
-        helloText.classList.add("animate__fadeOutUp");
+        logoLarge.classList.replace("animate__zoomIn", "animate__zoomOut");
+        helloText.classList.replace("animate__bounceIn", "animate__fadeOutUp");
+        helloSubtext.classList.replace("animate__fadeInUp", "animate__fadeOutDown");
+
+        // After fade out, hide hello overlay and start loading
         setTimeout(() => {
-          const helloOverlay = document.getElementById("hello-overlay");
           helloOverlay.style.display = "none";
           startLoadingSequence();
-        }, 800);
-      }, 3000);
-      
-      // LOADING SEQUENCE with messages
-      function startLoadingSequence() {
-        const loadingOverlay = document.getElementById("loading-overlay");
-        const loadingMessage = document.getElementById("loadingMessage");
-        loadingOverlay.style.display = "flex";
-        const messages = [
-          "Learning your past cravings...",
-          "Past cravings found: You like sweet food recently...",
-          "Recent search results show you like Malaysian local cuisine...",
-          "What do you currently feel like having?"
-        ];
-        let msgIndex = 0;
-        loadingMessage.textContent = messages[msgIndex];
-        // Change message every 2.5 seconds
-        const msgInterval = setInterval(() => {
-          msgIndex++;
-          if (msgIndex < messages.length) {
+        }, 800); // Match animation duration
+      }, 3000); // Display duration
+    }
+
+    // 2. Loading Sequence
+    function startLoadingSequence() {
+      loadingOverlay.style.display = "flex";
+      const messages = [
+        { text: "Warming up the kitchen...", progress: 10 },
+        { text: "Checking today's specials...", progress: 30 },
+        { text: "Consulting the flavor oracle...", progress: 60 },
+        { text: "Finding your taste profile...", progress: 85 },
+        { text: "Ready for your preferences!", progress: 100 }
+      ];
+      let msgIndex = 0;
+      let progressInterval;
+
+      function showNextMessage() {
+        if (msgIndex >= messages.length) {
+           clearInterval(progressInterval);
+          // End loading sequence
+          setTimeout(() => {
+             loadingMessage.classList.remove("animate__fadeIn");
+             loadingMessage.classList.add("animate__fadeOut");
+            setTimeout(() => {
+                 loadingOverlay.style.display = "none";
+                // Show survey after loading
+                 showSurvey();
+             }, 500); // Wait for fade out
+           }, 1000); // Brief pause on last message
+          return;
+         }
+
+        const currentMsg = messages[msgIndex];
+
+        // Fade out previous message (if not the first one)
+        if (msgIndex > 0) {
             loadingMessage.classList.remove("animate__fadeIn");
             loadingMessage.classList.add("animate__fadeOut");
-            setTimeout(() => {
-              loadingMessage.classList.remove("animate__fadeOut");
-              loadingMessage.classList.add("animate__fadeIn");
-              loadingMessage.textContent = messages[msgIndex];
-            }, 500);
-          } else {
-            clearInterval(msgInterval);
-            // End loading after a brief pause
-            setTimeout(() => {
-              loadingOverlay.style.display = "none";
-            }, 1000);
-          }
-        }, 2500);
+         }
+
+        // Update progress text immediately
+         loadingProgressText.textContent = currentMsg.text.split("...")[0]; // Show shorter text next to bar
+
+        // Animate progress bar
+         loadingProgressBar.style.width = `${currentMsg.progress}%`;
+
+        // After a short delay (for fade-out), update and fade in the main message
+         setTimeout(() => {
+            loadingMessage.textContent = currentMsg.text;
+             loadingMessage.classList.remove("animate__fadeOut");
+            loadingMessage.classList.add("animate__fadeIn");
+             msgIndex++;
+         }, msgIndex > 0 ? 500 : 0); // No delay for the first message fade-in
+
       }
-      
-      // Determine meal type based on local time
-      function getMealType() {
-        const hour = new Date().getHours();
-        if (hour < 11) return "brunch";
-        else if (hour < 16) return "lunch";
-        else return "dinner";
-      }
-      
-      // SHOW SURVEY: update survey question based on meal type
-      window.onload = function() {
+
+
+      // Start the message sequence
+      loadingMessage.classList.add("animate__fadeIn"); // Initial fade-in for the container itself
+      showNextMessage(); // Show the first message
+      progressInterval = setInterval(showNextMessage, 1500); // Interval for subsequent messages
+    }
+
+    // 3. Show Survey
+    function showSurvey() {
+        // Set meal type in the UI
         const mealType = getMealType();
-        const spicyQuestion = document.getElementById("spicyQuestion");
-        spicyQuestion.textContent = `How spicy do you want your ${mealType}?`;
-      }
-      
-      // Example: survey button click handlers (expand as needed)
-      const surveyButtons = document.querySelectorAll("#survey-container .button-group button");
-      surveyButtons.forEach(button => {
-        button.addEventListener("click", function() {
-          // For demonstration, mark the button as selected
-          this.style.backgroundColor = varValue("--primary-dark");
+        mealTypeHeaderSpan.textContent = mealType;
+        mealTypeTextSpans.forEach(span => {
+            span.textContent = mealType.toLowerCase(); // e.g., "your lunch?"
         });
-      });
-      
-      // Helper function to get CSS variable value
-      function varValue(variable) {
-        return getComputedStyle(document.documentElement).getPropertyValue(variable);
+
+        // Make survey visible with animation
+        surveyContainer.classList.add("visible");
+
+        // Add event listeners for survey options
+        questionGroups.forEach(group => {
+            group.addEventListener('click', handleOptionClick);
+        });
+
+        // Initialize progress and preview (to show 0% and hide preview initially)
+        updateProgress();
+    }
+
+
+    // 4. Form Submission
+    surveyForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      if (submitButton.disabled) {
+          alert("Please answer all questions before submitting.");
+          return;
       }
-      
-      // Optional: Handle form submission
-      document.getElementById("surveyForm").addEventListener("submit", function(e) {
-        e.preventDefault();
-        alert("Survey submitted! Thank you for your feedback.");
-        // Process survey data as needed.
-      });
-      
-      // Footer animation on scroll
-      const footer = document.querySelector("footer");
-      function checkFooterVisibility() {
-        const footerRect = footer.getBoundingClientRect();
-        if (footerRect.top < window.innerHeight) {
-          footer.classList.add("visible");
-          window.removeEventListener("scroll", checkFooterVisibility);
-        }
-      }
-      window.addEventListener("scroll", checkFooterVisibility);
-      checkFooterVisibility();
+
+      console.log("Survey Submitted! Preferences:", userSelections);
+      // Here you would typically send 'userSelections' to a server
+      // For now, just show an alert or redirect
+      alert(`Finding the perfect ${userSelections.taste} ${userSelections.cuisine} ${getMealType().toLowerCase()} for you... (Spice: ${userSelections.spice}, Diet: ${userSelections.diet})`);
+
+      // Optional: Show loading indicator again, then results page
+      // loadingOverlay.style.display = 'flex';
+      // loadingMessage.textContent = 'Finding your perfect meal...';
+      // // Simulate API call
+      // setTimeout(() => {
+      //    window.location.href = 'results.html'; // Redirect to a results page
+      // }, 2000);
     });
-  </script>
+
+    // 5. Footer Animation
+    const footerObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          footer.classList.add("visible");
+          footerObserver.unobserve(entry.target); // Stop observing once visible
+        }
+      });
+    }, { threshold: 0.1 }); // Trigger when 10% of the footer is visible
+
+    footerObserver.observe(footer);
+
+    // --- Start the flow ---
+    startHelloAnimation();
+
+  });
+</script>
 </body>
 </html>
