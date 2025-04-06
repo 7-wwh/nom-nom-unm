@@ -844,7 +844,7 @@
             </div>
           </div>
           
-<form action="results.html" method="get">
+<form id="surveyForm" action="results.html" method="get">
   <div class="submit-container">
     <button type="submit" class="submit-button" id="submitSurvey">
       <i class="fa-solid fa-paper-plane"></i> Find My Perfect Meal
@@ -932,6 +932,8 @@
     const questionGroups = document.querySelectorAll(".survey-question .button-group");
     const totalQuestions = questionGroups.length;
 
+    const submitButton = document.getElementById("submitSurvey");
+    
     const footer = document.querySelector("footer");
 
     // --- State ---
@@ -961,10 +963,66 @@
         }
         const percent = Math.round((answeredQuestions / totalQuestions) * 100);
 
-        surveyProgress.style.width = `${percent}%`;
-        currentQuestionSpan.textContent = answeredQuestions; // Or could track the *current* focused question
-        completionPercentSpan.textContent = percent;
+        function updateProgress() {
+        let answeredQuestions = 0;
+        for (const key in userSelections) {
+            if (userSelections[key]) {
+                answeredQuestions++;
+            }
+        }
+        // Enable submit button only when all questions are answered
+        submitButton.disabled = answeredQuestions !== 4; // Ensure 4 questions are answered
+        submitButton.style.opacity = submitButton.disabled ? 0.6 : 1;
+        submitButton.style.cursor = submitButton.disabled ? 'not-allowed' : 'pointer';
+    }
 
+    // Handle the option click and update the user selections
+    function handleOptionClick(event) {
+        const button = event.target.closest('.option-button');
+        if (!button) return;
+
+        const parentGroup = button.closest('.button-group');
+        const questionKey = parentGroup.id.replace('Options', ''); // e.g., 'spicy', 'cuisine'
+
+        // Remove 'selected' from siblings in the same group
+        parentGroup.querySelectorAll('.option-button').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+
+        // Add 'selected' to the clicked button
+        button.classList.add('selected');
+
+        // Store the selection (using data attribute)
+        const selectedValue = button.dataset.spice || button.dataset.cuisine || button.dataset.taste || button.dataset.diet;
+        userSelections[questionKey] = selectedValue;
+
+        // Update progress
+        updateProgress();
+    }
+
+    // Set event listeners for all option buttons
+    const questionGroups = document.querySelectorAll(".survey-question .button-group");
+    questionGroups.forEach(group => {
+        group.addEventListener('click', handleOptionClick);
+    });
+
+    // Handle form submission
+    document.getElementById("surveyForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        if (submitButton.disabled) {
+            alert("Please answer all questions before submitting.");
+            return;
+        }
+
+        // Build query string for GET request
+        const queryString = new URLSearchParams(userSelections).toString();
+        window.location.href = `results.html?${queryString}`;
+    });
+
+    // Initialize progress
+    updateProgress();
+});
         // Enable submit button only when all questions are answered
         submitButton.disabled = answeredQuestions !== totalQuestions;
         submitButton.style.opacity = submitButton.disabled ? 0.6 : 1;
