@@ -1,997 +1,1048 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NomNom - Your Personal Food Discovery Platform</title>
-
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
-  <style>
-    /* --- CSS Variables --- */
-    :root {
-      --primary-color: #ff6b6b; /* Main red */
-      --primary-dark: #e05050; /* Darker red */
-      --secondary-color: #ffd166; /* Yellow accent */
-      --dark-color: #292f36; /* Dark text/background */
-      --light-color: #f7fff7; /* Light background */
-      --accent-color: #4ecdc4; /* Teal accent */
-      --gray-light: #f8f9fa; /* Light gray background */
-      --shadow-sm: 0 2px 5px rgba(0,0,0,0.1);
-      --shadow-md: 0 5px 15px rgba(0,0,0,0.1);
-      --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
-      --transition: all 0.3s ease;
-      --button-transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother button transition */
-    }
-
-    /* --- Global Reset & Base Styles --- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif; /* Applied Poppins font */
-    }
-
-    body {
-      background-color: var(--light-color);
-      color: var(--dark-color);
-      line-height: 1.6;
-      overflow-x: hidden; /* Prevent horizontal scroll */
-    }
-
-    /* Prevent scrolling when mobile menu is open */
-    body.no-scroll {
-        overflow: hidden;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    /* --- Fixed Header --- */
-    header {
-      background-color: rgba(255,255,255,0.98); /* Slightly transparent white */
-      box-shadow: var(--shadow-sm);
-      position: fixed; /* Stick to top */
-      width: 100%;
-      top: 0;
-      left: 0;
-      z-index: 100; /* Stay above other content */
-      transition: var(--transition);
-    }
-
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 0;
-      position: relative; /* Needed for absolute positioning of mobile menu */
-    }
-
-    /* --- Logo Styling --- */
-    .logo, .footer-logo {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--primary-color); /* Red for first part */
-      display: flex;
-      align-items: center;
-      transition: var(--transition);
-      text-decoration: none; /* Remove underline */
-    }
-
-    .logo span, .footer-logo span {
-      color: var(--secondary-color); /* Yellow for second part */
-    }
-
-    .logo i, .footer-logo i {
-      margin-right: 8px;
-      font-size: 1.8rem;
-      color: var(--primary-color); /* Ensure icon matches primary text color */
-    }
-
-    /* --- Navigation Links --- */
-    .nav-links {
-      display: flex;
-      gap: 25px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--dark-color);
-      font-weight: 500;
-      position: relative;
-      padding: 8px 5px;
-      transition: var(--transition);
-    }
-
-    /* Underline effect for desktop nav links */
-    .nav-links a:after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      bottom: 0;
-      left: 0;
-      background-color: var(--primary-color);
-      transition: var(--transition);
-    }
-
-    .nav-links a:hover {
-      color: var(--primary-color);
-    }
-
-    .nav-links a:hover:after {
-      width: 100%;
-    }
-
-    /* --- Mobile Menu Toggle (Hamburger) --- */
-    .menu-toggle {
-      display: none; /* Hidden on desktop */
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      z-index: 110; /* Ensure toggle is above expanded menu */
-    }
-
-    .menu-toggle span {
-      height: 3px;
-      width: 30px;
-      background-color: var(--primary-color);
-      border-radius: 3px;
-      transition: var(--transition);
-    }
-
-    /* --- Authentication Buttons (Header) --- */
-    .auth-buttons {
-      display: flex;
-      gap: 15px;
-    }
-
-    /* --- General Button Styling --- */
-    .btn {
-      /* UPDATED: Increased padding and font size for bigger buttons */
-      padding: 12px 30px;
-      border: none;
-      border-radius: 30px; /* Rounded corners */
-      cursor: pointer;
-      font-weight: 600; /* Slightly bolder */
-      transition: var(--button-transition); /* Use smoother transition */
-      text-decoration: none;
-      display: inline-flex; /* Align icon and text */
-      align-items: center;
-      justify-content: center; /* Center content */
-      font-size: 1rem; /* UPDATED: Slightly larger font */
-      position: relative; /* Needed for potential effects */
-      overflow: hidden; /* Clip potential overflow from effects */
-    }
-
-    .btn i {
-      margin-right: 8px;
-    }
-
-    /* --- Primary Button (Get Started, Save, etc.) --- */
-    .btn-primary {
-      background-image: linear-gradient(to right, var(--primary-color) 0%, var(--primary-dark) 100%);
-      color: white;
-      box-shadow: 0 3px 8px rgba(255, 107, 107, 0.3); /* Default subtle shadow */
-    }
-
-    .btn-primary:hover {
-      /* Standard hover effect for non-animated primary buttons */
-      background-image: linear-gradient(to right, var(--primary-dark) 0%, var(--primary-color) 100%); /* Reverse gradient */
-      transform: translateY(-4px) scale(1.03); /* Lift and scale */
-      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4); /* More pronounced shadow */
-    }
-
-    /* --- Secondary Button (Learn More, Login) --- */
-    .btn-secondary {
-      background-color: white;
-      color: var(--primary-color);
-      border: 1.5px solid var(--primary-color); /* Slightly thicker border */
-      box-shadow: var(--shadow-sm);
-    }
-
-    .btn-secondary:hover {
-      background-color: var(--primary-color);
-      color: white;
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
-    }
-
-    /* --- Hero Section --- */
-    .hero {
-      min-height: 100vh; /* Full viewport height */
-      padding-top: 100px; /* Adjust padding to account for fixed header height */
-      display: flex;
-      align-items: center;
-      /* Background image with dark overlay */
-      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-        url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
-      color: white;
-      position: relative; /* For pseudo-element */
-    }
-
-    /* Faded bottom edge for smoother transition to next section */
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100px;
-      background: linear-gradient(to top, var(--light-color), transparent);
-      z-index: 1;
-    }
-
-    .hero-content {
-      max-width: 600px;
-      position: relative; /* Ensure content is above the gradient overlay */
-      z-index: 2;
-      /* Animation applied via class */
-    }
-
-    .hero h1 {
-      font-size: 3.5rem;
-      margin-bottom: 20px;
-      line-height: 1.2;
-      font-weight: 700;
-    }
-
-    .hero p {
-      font-size: 1.25rem;
-      margin-bottom: 35px; /* More space before buttons */
-      opacity: 0.9;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 20px; /* More gap between buttons */
-      flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
-    }
-
-    /* --- NEW: Jumping Animation Keyframes --- */
-    @keyframes jump {
-      0%, 100% {
-        transform: translateY(0); /* Start and end at normal position */
-      }
-      50% {
-        transform: translateY(-6px); /* Jump up slightly */
-      }
-    }
-
-    /* --- NEW: Apply animation ONLY to the hero's Get Started button --- */
-    #hero-get-started-btn {
-      /* Apply the jump animation infinitely */
-      animation: jump 1.2s infinite ease-in-out;
-    }
-
-    /* --- NEW: Adjust hover effect for the jumping button --- */
-    /* Override the standard btn-primary hover to avoid conflicting transforms */
-    #hero-get-started-btn:hover {
-       transform: scale(1.03); /* Only apply scale on hover, not translateY */
-       /* Keep other hover effects */
-       background-image: linear-gradient(to right, var(--primary-dark) 0%, var(--primary-color) 100%);
-       box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
-    }
-
-
-    /* --- General Section Styling --- */
-    section {
-       padding: 100px 0; /* Consistent vertical padding */
-    }
-
-    /* --- Features Section (How It Works) --- */
-    .features {
-      background-color: white; /* White background for contrast */
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .section-title h2 {
-      font-size: 2.5rem;
-      color: var(--primary-color);
-      margin-bottom: 15px;
-      position: relative;
-      display: inline-block; /* Allows underline positioning */
-      font-weight: 700;
-    }
-
-    /* Underline for section titles */
-    .section-title h2:after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      bottom: -10px;
-      width: 80px;
-      height: 3px;
-      background-color: var(--secondary-color);
-      transform: translateX(-50%); /* Center the underline */
-    }
-
-    .section-title p {
-      color: var(--dark-color);
-      font-size: 1.2rem;
-      max-width: 700px;
-      margin: 20px auto 0;
-      opacity: 0.8;
-    }
-
-    .feature-flow {
-      display: flex;
-      align-items: center; /* Vertically align cards and arrows */
-      justify-content: center;
-      flex-wrap: wrap; /* Allow wrapping on smaller screens */
-      gap: 20px; /* Gap between cards/arrows */
-      margin-top: 50px;
-    }
-
-    .feature-card {
-      background-color: white;
-      border-radius: 15px;
-      padding: 35px 25px;
-      box-shadow: var(--shadow-md);
-      transition: var(--transition);
-      text-align: center;
-      flex: 1; /* Allow cards to grow */
-      min-width: 200px; /* Minimum width */
-      max-width: 250px; /* Maximum width */
-      position: relative;
-      overflow: hidden; /* Clip top border effect */
-    }
-
-    /* Top border accent */
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: var(--primary-color);
-      transition: var(--transition);
-    }
-
-    .feature-card:hover {
-      transform: translateY(-15px); /* Lift effect */
-      box-shadow: var(--shadow-lg);
-    }
-
-    .feature-card:hover::before {
-      height: 8px; /* Thicker border on hover */
-    }
-
-    .feature-icon {
-      margin-bottom: 25px;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background-color: rgba(255, 107, 107, 0.1); /* Light red background */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 25px; /* Center the icon */
-      transition: var(--transition);
-    }
-
-    .feature-icon i {
-      font-size: 2rem;
-      color: var(--primary-color);
-      transition: var(--transition);
-    }
-
-    .feature-card:hover .feature-icon {
-      background-color: var(--primary-color); /* Fill background on hover */
-    }
-
-    .feature-card:hover .feature-icon i {
-      color: white; /* Change icon color on hover */
-    }
-
-    .feature-card h3 {
-      margin-bottom: 15px;
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-
-    .feature-card p {
-        font-size: 0.95rem;
-        color: #555; /* Slightly lighter text */
-        line-height: 1.5;
-    }
-
-    /* Arrow between feature cards */
-    .arrow {
-      color: var(--primary-color);
-      font-size: 2rem;
-      transition: var(--transition);
-      flex-basis: 50px; /* Give arrow space */
-      text-align: center;
-    }
-
-    /* Pulse animation for arrow */
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.1); opacity: 0.8; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    .arrow i {
-      animation: pulse 1.5s infinite ease-in-out;
-    }
-
-    /* --- Preferences Section --- */
-    .preferences {
-        background: linear-gradient(rgba(255,107,107,0.05), rgba(255,107,107,0.1)); /* Subtle gradient background */
-        padding: 100px 0;
-    }
-
-    .preferences-form {
-        background-color: white;
-        padding: 40px;
-        border-radius: 15px;
-        box-shadow: var(--shadow-md);
-        max-width: 800px; /* Limit form width */
-        margin: 0 auto; /* Center form */
-    }
-
-    .form-group {
-        margin-bottom: 30px;
-    }
-
-    .form-group label { /* Main labels (Cuisine, Diet, Spice) */
-        display: block;
-        margin-bottom: 15px;
-        font-weight: 600;
-        font-size: 1.1rem;
-        color: var(--dark-color);
-    }
-
-    .checkbox-group, .radio-group {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px; /* Space between options */
-        margin-top: 10px;
-    }
-
-    .checkbox-item, .radio-item {
-        display: flex;
-        align-items: center;
-        gap: 8px; /* Space between input and text label */
-        cursor: pointer;
-    }
-
-    /* Style checkboxes and radio buttons */
-    .checkbox-item input[type="checkbox"],
-    .radio-item input[type="radio"] {
-        width: auto;
-        margin: 0;
-        accent-color: var(--primary-color); /* Color the check/radio */
-        cursor: pointer;
-        transform: scale(1.1); /* Slightly larger */
-        vertical-align: middle; /* Align better with label */
-    }
-
-    .checkbox-item label,
-    .radio-item label { /* Labels for individual options */
-        font-weight: 500;
-        color: #333;
-        cursor: pointer;
-        padding-top: 2px; /* Fine-tune vertical alignment */
-    }
-
-    .preferences-form .btn { /* Style button within this form */
-        margin-top: 10px; /* Space above button */
-    }
-
-
-    /* --- Recommendations Section --- */
-    .recommendations {
-      background-color: var(--gray-light); /* Light gray background */
-    }
-
-    .recommendations-grid {
-      display: grid;
-      /* Responsive grid: fills columns, minimum 280px width */
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 30px;
-    }
-
-    .dish-card {
-      background-color: white;
-      border-radius: 15px;
-      overflow: hidden; /* Clip image zoom */
-      box-shadow: var(--shadow-md);
-      transition: var(--transition);
-      cursor: pointer;
-      position: relative;
-      display: flex; /* Use flex for better layout control */
-      flex-direction: column; /* Stack image and text */
-    }
-
-    .dish-card:hover {
-      transform: translateY(-10px); /* Lift effect */
-      box-shadow: var(--shadow-lg);
-    }
-
-    .dish-thumb {
-      position: relative;
-      overflow: hidden;
-      height: 200px; /* Fixed height for image container */
-      width: 100%;
-    }
-
-    .dish-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover; /* Cover container, might crop */
-      transition: transform 0.4s ease; /* Smooth zoom */
-    }
-
-    .dish-card:hover .dish-thumb img {
-      transform: scale(1.08); /* Zoom image on hover */
-    }
-
-    .dish-info {
-      padding: 20px;
-      flex-grow: 1; /* Allow info section to fill remaining card height */
-    }
-
-    .dish-info h3 {
-      margin-bottom: 10px;
-      font-size: 1.3rem;
-      color: var(--primary-color);
-      font-weight: 600;
-    }
-
-    .dish-info p {
-      font-size: 0.95rem;
-      color: var(--dark-color);
-      line-height: 1.5;
-      opacity: 0.8;
-    }
-
-    /* --- Footer --- */
-    footer {
-      background-color: var(--dark-color);
-      color: #ddd; /* Lighter base color for footer text */
-      padding: 70px 0 20px;
-      position: relative; /* For top border */
-    }
-
-    /* Gradient top border for footer */
-    footer::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--accent-color));
-    }
-
-    .footer-content {
-      display: grid;
-      /* Responsive grid for footer columns */
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 40px;
-      margin-bottom: 50px;
-      padding: 0 20px; /* Add horizontal padding */
-    }
-
-    .footer-about {
-      color: #bbb;
-      margin-bottom: 25px;
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
-
-    .social-links {
-      display: flex;
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .social-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      background-color: rgba(255,255,255,0.1); /* Semi-transparent background */
-      border-radius: 50%; /* Circular icons */
-      color: white;
-      transition: var(--transition);
-      text-decoration: none;
-    }
-    .social-icon i {
-       font-size: 1rem; /* Adjust icon size if needed */
-    }
-
-    .social-icon:hover {
-      background-color: var(--primary-color); /* Highlight color on hover */
-      transform: translateY(-3px);
-      color: white;
-    }
-
-    .footer-column h3 {
-      font-size: 1.2rem;
-      margin-bottom: 25px;
-      color: var(--secondary-color); /* Yellow accent for headings */
-      position: relative;
-      padding-bottom: 10px;
-      font-weight: 600;
-    }
-
-    /* Underline for footer column headings */
-    .footer-column h3::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 30px;
-      height: 2px;
-      background-color: var(--primary-color);
-    }
-
-    .footer-links {
-      list-style: none;
-      padding: 0;
-    }
-
-    .footer-links li {
-      margin-bottom: 12px;
-    }
-
-    .footer-links a {
-      color: #ccc; /* Slightly brighter link color */
-      text-decoration: none;
-      transition: var(--transition);
-      position: relative;
-      padding-left: 15px; /* Space for arrow */
-      font-size: 0.95rem;
-    }
-
-    /* Arrow icon before footer links */
-    .footer-links a::before {
-      content: '›';
-      position: absolute;
-      left: 0;
-      top: -1px; /* Adjust vertical alignment */
-      color: var(--primary-color);
-      transition: var(--transition);
-      font-weight: bold;
-    }
-
-    .footer-links a:hover {
-      color: var(--primary-color); /* Highlight on hover */
-      padding-left: 20px; /* Move text slightly on hover */
-    }
-
-    .footer-links a:hover::before {
-      left: 5px; /* Move arrow slightly on hover */
-    }
-
-    .copyright {
-      text-align: center;
-      padding-top: 30px;
-      margin-top: 30px;
-      border-top: 1px solid #444; /* Separator line */
-      font-size: 0.9rem;
-      color: #bbb;
-    }
-
-    /* --- Responsive Adjustments --- */
-
-    /* Medium screens (tablets, large phones) */
-    @media (max-width: 992px) {
-        .hero h1 {
-            font-size: 3rem;
-        }
-        .feature-flow {
-            gap: 30px; /* Increase gap when wrapping */
-        }
-        .arrow {
-            display: none; /* Hide arrows when cards wrap */
-        }
-         .footer-content {
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-         }
-    }
-
-    /* Small screens (phones) */
-    @media (max-width: 768px) {
-      .menu-toggle {
-        display: flex; /* Show hamburger menu */
-      }
-
-      .nav-links {
-        display: none; /* Hide links by default */
-        position: absolute;
-        top: 100%; /* Position below nav bar */
-        left: 0;
-        width: 100%;
-        background-color: white;
-        box-shadow: var(--shadow-md);
-        flex-direction: column; /* Stack links vertically */
-        padding: 20px 0;
-        gap: 0; /* Reset gap for vertical layout */
-        border-top: 1px solid #eee;
-        /* Prevent interaction when hidden */
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.3s ease, transform 0.3s ease;
-        transform: translateY(-10px); /* Start slightly up */
-      }
-
-      .nav-links.active {
-        display: flex; /* Show menu when active */
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateY(0); /* Slide down */
-      }
-
-      .nav-links a {
-        padding: 15px 20px; /* Adjust padding for vertical menu */
-        text-align: center;
-        width: 100%;
-      }
-       .nav-links a:after {
-         display: none; /* Hide underline effect on mobile */
-       }
-       .nav-links a:hover {
-         background-color: var(--gray-light); /* Add hover background */
-         color: var(--primary-color); /* Ensure hover color is primary */
-       }
-
-
-      .auth-buttons {
-        display: none; /* Hide auth buttons in mobile nav bar */
-      }
-
-      .hero h1 {
-        font-size: 2.5rem;
-        text-align: center; /* Center hero text */
-      }
-      .hero p {
-          font-size: 1.1rem;
-          text-align: center; /* Center hero text */
-      }
-      .hero-buttons {
-          justify-content: center; /* Center hero buttons */
-      }
-
-      .feature-card, .dish-card {
-        margin-bottom: 20px;
-        max-width: none; /* Allow cards to take more width */
-      }
-      .footer-content {
-        grid-template-columns: 1fr; /* Stack footer columns */
-        text-align: center; /* Center text */
-      }
-      .footer-column h3::after {
-         left: 50%; /* Center underline */
-         transform: translateX(-50%);
-      }
-      .footer-links a {
-         display: block; /* Make links full width */
-         padding-left: 0;
-         text-align: center;
-      }
-      .footer-links a::before {
-         display: none; /* Hide arrow */
-      }
-      .footer-links a:hover {
-         padding-left: 0;
-      }
-      .social-links {
-         justify-content: center; /* Center social icons */
-      }
-    }
-
-    /* Extra small screens */
-     @media (max-width: 480px) {
-         .hero h1 {
-             font-size: 2.2rem; /* Further reduce hero title */
-         }
-         .section-title h2 {
-             font-size: 2rem;
-         }
-         .btn {
-             padding: 12px 25px; /* Slightly larger buttons */
-             font-size: 1rem;
-         }
-         /* Ensure animated button is still reasonably sized */
-         #hero-get-started-btn {
-             padding: 14px 35px; /* Make the jumping button slightly larger */
-             font-size: 1.05rem;
-         }
-         .preferences-form {
-             padding: 25px; /* Reduce form padding */
-         }
-         .checkbox-group, .radio-group {
-             gap: 15px; /* Reduce gap between options */
-         }
-     }
-
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NomNom - Your Personal Food Discovery Platform</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <style>
+    /* --- CSS Variables --- */
+    :root {
+      --primary-color: #ff6b6b; /* Main red */
+      --primary-dark: #e05050; /* Darker red */
+      --secondary-color: #ffd166; /* Yellow accent */
+      --dark-color: #292f36; /* Dark text/background */
+      --light-color: #f7fff7; /* Light background */
+      --accent-color: #4ecdc4; /* Teal accent */
+      --gray-light: #f8f9fa; /* Light gray background */
+      --shadow-sm: 0 2px 5px rgba(0,0,0,0.1);
+      --shadow-md: 0 5px 15px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
+      --transition: all 0.3s ease;
+      --button-transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother button transition */
+    }
+
+    /* --- Global Reset & Base Styles --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif; /* Applied Poppins font */
+    }
+
+    body {
+      background-color: var(--light-color);
+      color: var(--dark-color);
+      line-height: 1.6;
+      overflow-x: hidden; /* Prevent horizontal scroll */
+    }
+
+    /* Prevent scrolling when mobile menu is open */
+    body.no-scroll {
+        overflow: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* --- Fixed Header --- */
+    header {
+      background-color: rgba(255,255,255,0.98); /* Slightly transparent white */
+      box-shadow: var(--shadow-sm);
+      position: fixed; /* Stick to top */
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100; /* Stay above other content */
+      transition: var(--transition);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      position: relative; /* Needed for absolute positioning of mobile menu */
+    }
+
+    /* --- Logo Styling --- */
+    .logo, .footer-logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color); /* Red for first part */
+      display: flex;
+      align-items: center;
+      transition: var(--transition);
+      text-decoration: none; /* Remove underline */
+    }
+
+    .logo span, .footer-logo span {
+      color: var(--secondary-color); /* Yellow for second part */
+    }
+
+    .logo i, .footer-logo i {
+      margin-right: 8px;
+      font-size: 1.8rem;
+      color: var(--primary-color); /* Ensure icon matches primary text color */
+    }
+
+    /* --- Navigation Links --- */
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dark-color);
+      font-weight: 500;
+      position: relative;
+      padding: 8px 5px;
+      transition: var(--transition);
+    }
+
+    /* Underline effect for desktop nav links */
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--primary-color);
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-color);
+    }
+
+    .nav-links a:hover:after {
+      width: 100%;
+    }
+
+    /* --- Mobile Menu Toggle (Hamburger) --- */
+    .menu-toggle {
+      display: none; /* Hidden on desktop */
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 110; /* Ensure toggle is above expanded menu */
+    }
+
+    .menu-toggle span {
+      height: 3px;
+      width: 30px;
+      background-color: var(--primary-color);
+      border-radius: 3px;
+      transition: var(--transition);
+    }
+
+    /* --- Authentication Buttons (Header) --- */
+    .auth-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    /* --- General Button Styling --- */
+    .btn {
+      /* UPDATED: Increased padding and font size for bigger buttons */
+      padding: 12px 30px;
+      border: none;
+      border-radius: 30px; /* Rounded corners */
+      cursor: pointer;
+      font-weight: 600; /* Slightly bolder */
+      transition: var(--button-transition); /* Use smoother transition */
+      text-decoration: none;
+      display: inline-flex; /* Align icon and text */
+      align-items: center;
+      justify-content: center; /* Center content */
+      font-size: 1rem; /* UPDATED: Slightly larger font */
+      position: relative; /* Needed for potential effects */
+      overflow: hidden; /* Clip potential overflow from effects */
+    }
+
+    .btn i {
+      margin-right: 8px;
+    }
+
+    /* --- Primary Button (Get Started, Save, etc.) --- */
+    .btn-primary {
+      background-image: linear-gradient(to right, var(--primary-color) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 3px 8px rgba(255, 107, 107, 0.3); /* Default subtle shadow */
+    }
+
+    .btn-primary:hover {
+      /* Standard hover effect for non-animated primary buttons */
+      background-image: linear-gradient(to right, var(--primary-dark) 0%, var(--primary-color) 100%); /* Reverse gradient */
+      transform: translateY(-4px) scale(1.03); /* Lift and scale */
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4); /* More pronounced shadow */
+    }
+
+    /* --- Secondary Button (Learn More, Login) --- */
+    .btn-secondary {
+      background-color: white;
+      color: var(--primary-color);
+      border: 1.5px solid var(--primary-color); /* Slightly thicker border */
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--primary-color);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* --- Hero Section --- */
+    .hero {
+      min-height: 100vh; /* Full viewport height */
+      padding-top: 100px; /* Adjust padding to account for fixed header height */
+      display: flex;
+      align-items: center;
+      /* Background image with dark overlay */
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+        url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+      color: white;
+      position: relative; /* For pseudo-element */
+    }
+
+    /* Faded bottom edge for smoother transition to next section */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: linear-gradient(to top, var(--light-color), transparent);
+      z-index: 1;
+    }
+
+    .hero-content {
+      max-width: 600px;
+      position: relative; /* Ensure content is above the gradient overlay */
+      z-index: 2;
+      /* Animation applied via class */
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 35px; /* More space before buttons */
+      opacity: 0.9;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 20px; /* More gap between buttons */
+      flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    }
+
+    /* --- NEW: Jumping Animation Keyframes --- */
+    @keyframes jump {
+      0%, 100% {
+        transform: translateY(0); /* Start and end at normal position */
+      }
+      50% {
+        transform: translateY(-6px); /* Jump up slightly */
+      }
+    }
+
+    /* --- NEW: Apply animation ONLY to the hero's Get Started button --- */
+    #hero-get-started-btn {
+      /* Apply the jump animation infinitely */
+      animation: jump 1.2s infinite ease-in-out;
+    }
+
+    /* --- NEW: Adjust hover effect for the jumping button --- */
+    /* Override the standard btn-primary hover to avoid conflicting transforms */
+    #hero-get-started-btn:hover {
+       transform: scale(1.03); /* Only apply scale on hover, not translateY */
+       /* Keep other hover effects */
+       background-image: linear-gradient(to right, var(--primary-dark) 0%, var(--primary-color) 100%);
+       box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+    }
+
+
+    /* --- General Section Styling --- */
+    section {
+       padding: 100px 0; /* Consistent vertical padding */
+    }
+
+    /* --- Features Section (How It Works) --- */
+    .features {
+      background-color: white; /* White background for contrast */
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block; /* Allows underline positioning */
+      font-weight: 700;
+    }
+
+    /* Underline for section titles */
+    .section-title h2:after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      width: 80px;
+      height: 3px;
+      background-color: var(--secondary-color);
+      transform: translateX(-50%); /* Center the underline */
+    }
+
+    .section-title p {
+      color: var(--dark-color);
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 20px auto 0;
+      opacity: 0.8;
+    }
+
+    .feature-flow {
+      display: flex;
+      align-items: center; /* Vertically align cards and arrows */
+      justify-content: center;
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
+      gap: 20px; /* Gap between cards/arrows */
+      margin-top: 50px;
+    }
+
+    .feature-card {
+      background-color: white;
+      border-radius: 15px;
+      padding: 35px 25px;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      text-align: center;
+      flex: 1; /* Allow cards to grow */
+      min-width: 200px; /* Minimum width */
+      max-width: 250px; /* Maximum width */
+      position: relative;
+      overflow: hidden; /* Clip top border effect */
+    }
+
+    /* Top border accent */
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--primary-color);
+      transition: var(--transition);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-15px); /* Lift effect */
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-card:hover::before {
+      height: 8px; /* Thicker border on hover */
+    }
+
+    .feature-icon {
+      margin-bottom: 25px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: rgba(255, 107, 107, 0.1); /* Light red background */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px; /* Center the icon */
+      transition: var(--transition);
+    }
+
+    .feature-icon i {
+      font-size: 2rem;
+      color: var(--primary-color);
+      transition: var(--transition);
+    }
+
+    .feature-card:hover .feature-icon {
+      background-color: var(--primary-color); /* Fill background on hover */
+    }
+
+    .feature-card:hover .feature-icon i {
+      color: white; /* Change icon color on hover */
+    }
+
+    .feature-card h3 {
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .feature-card p {
+        font-size: 0.95rem;
+        color: #555; /* Slightly lighter text */
+        line-height: 1.5;
+    }
+
+    /* Arrow between feature cards */
+    .arrow {
+      color: var(--primary-color);
+      font-size: 2rem;
+      transition: var(--transition);
+      flex-basis: 50px; /* Give arrow space */
+      text-align: center;
+    }
+
+    /* Pulse animation for arrow */
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .arrow i {
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+
+    /* --- Preferences Section --- */
+    .preferences {
+        background: linear-gradient(rgba(255,107,107,0.05), rgba(255,107,107,0.1)); /* Subtle gradient background */
+        padding: 100px 0;
+    }
+
+    .preferences-form {
+        background-color: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: var(--shadow-md);
+        max-width: 800px; /* Limit form width */
+        margin: 0 auto; /* Center form */
+    }
+
+    .form-group {
+        margin-bottom: 30px;
+    }
+
+    .form-group label { /* Main labels (Cuisine, Diet, Spice) */
+        display: block;
+        margin-bottom: 15px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: var(--dark-color);
+    }
+
+    .checkbox-group, .radio-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px; /* Space between options */
+        margin-top: 10px;
+    }
+
+    .checkbox-item, .radio-item {
+        display: flex;
+        align-items: center;
+        gap: 8px; /* Space between input and text label */
+        cursor: pointer;
+    }
+
+    /* Style checkboxes and radio buttons */
+    .checkbox-item input[type="checkbox"],
+    .radio-item input[type="radio"] {
+        width: auto;
+        margin: 0;
+        accent-color: var(--primary-color); /* Color the check/radio */
+        cursor: pointer;
+        transform: scale(1.1); /* Slightly larger */
+        vertical-align: middle; /* Align better with label */
+    }
+
+    .checkbox-item label,
+    .radio-item label { /* Labels for individual options */
+        font-weight: 500;
+        color: #333;
+        cursor: pointer;
+        padding-top: 2px; /* Fine-tune vertical alignment */
+    }
+
+    .preferences-form .btn { /* Style button within this form */
+        margin-top: 10px; /* Space above button */
+    }
+
+
+    /* --- Recommendations Section --- */
+    .recommendations {
+      background-color: var(--gray-light); /* Light gray background */
+    }
+
+    .recommendations-grid {
+      display: grid;
+      /* Responsive grid: fills columns, minimum 280px width */
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .dish-card {
+      background-color: white;
+      border-radius: 15px;
+      overflow: hidden; /* Clip image zoom */
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+      display: flex; /* Use flex for better layout control */
+      flex-direction: column; /* Stack image and text */
+    }
+
+    .dish-card:hover {
+      transform: translateY(-10px); /* Lift effect */
+      box-shadow: var(--shadow-lg);
+    }
+
+    .dish-thumb {
+      position: relative;
+      overflow: hidden;
+      height: 200px; /* Fixed height for image container */
+      width: 100%;
+    }
+
+    .dish-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Cover container, might crop */
+      transition: transform 0.4s ease; /* Smooth zoom */
+    }
+
+    .dish-card:hover .dish-thumb img {
+      transform: scale(1.08); /* Zoom image on hover */
+    }
+
+    .dish-info {
+      padding: 20px;
+      flex-grow: 1; /* Allow info section to fill remaining card height */
+    }
+
+    .dish-info h3 {
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    .dish-info p {
+      font-size: 0.95rem;
+      color: var(--dark-color);
+      line-height: 1.5;
+      opacity: 0.8;
+    }
+
+    /* --- Footer --- */
+    footer {
+      background-color: var(--dark-color);
+      color: #ddd; /* Lighter base color for footer text */
+      padding: 70px 0 20px;
+      position: relative; /* For top border */
+    }
+
+    /* Gradient top border for footer */
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--accent-color));
+    }
+
+    .footer-content {
+      display: grid;
+      /* Responsive grid for footer columns */
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 40px;
+      margin-bottom: 50px;
+      padding: 0 20px; /* Add horizontal padding */
+    }
+
+    .footer-about {
+      color: #bbb;
+      margin-bottom: 25px;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255,255,255,0.1); /* Semi-transparent background */
+      border-radius: 50%; /* Circular icons */
+      color: white;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .social-icon i {
+       font-size: 1rem; /* Adjust icon size if needed */
+    }
+
+    .social-icon:hover {
+      background-color: var(--primary-color); /* Highlight color on hover */
+      transform: translateY(-3px);
+      color: white;
+    }
+
+    .footer-column h3 {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+      color: var(--secondary-color); /* Yellow accent for headings */
+      position: relative;
+      padding-bottom: 10px;
+      font-weight: 600;
+    }
+
+    /* Underline for footer column headings */
+    .footer-column h3::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 30px;
+      height: 2px;
+      background-color: var(--primary-color);
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: #ccc; /* Slightly brighter link color */
+      text-decoration: none;
+      transition: var(--transition);
+      position: relative;
+      padding-left: 15px; /* Space for arrow */
+      font-size: 0.95rem;
+    }
+
+    /* Arrow icon before footer links */
+    .footer-links a::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      top: -1px; /* Adjust vertical alignment */
+      color: var(--primary-color);
+      transition: var(--transition);
+      font-weight: bold;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-color); /* Highlight on hover */
+      padding-left: 20px; /* Move text slightly on hover */
+    }
+
+    .footer-links a:hover::before {
+      left: 5px; /* Move arrow slightly on hover */
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      margin-top: 30px;
+      border-top: 1px solid #444; /* Separator line */
+      font-size: 0.9rem;
+      color: #bbb;
+    }
+
+    /* --- Responsive Adjustments --- */
+
+    /* Medium screens (tablets, large phones) */
+    @media (max-width: 992px) {
+        .hero h1 {
+            font-size: 3rem;
+        }
+        .feature-flow {
+            gap: 30px; /* Increase gap when wrapping */
+        }
+        .arrow {
+            display: none; /* Hide arrows when cards wrap */
+        }
+         .footer-content {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+         }
+    }
+
+    /* Small screens (phones) */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: flex; /* Show hamburger menu */
+      }
+
+      .nav-links {
+        display: none; /* Hide links by default */
+        position: absolute;
+        top: 100%; /* Position below nav bar */
+        left: 0;
+        width: 100%;
+        background-color: white;
+        box-shadow: var(--shadow-md);
+        flex-direction: column; /* Stack links vertically */
+        padding: 20px 0;
+        gap: 0; /* Reset gap for vertical layout */
+        border-top: 1px solid #eee;
+        /* Prevent interaction when hidden */
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        transform: translateY(-10px); /* Start slightly up */
+      }
+
+      .nav-links.active {
+        display: flex; /* Show menu when active */
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0); /* Slide down */
+      }
+
+      .nav-links a {
+        padding: 15px 20px; /* Adjust padding for vertical menu */
+        text-align: center;
+        width: 100%;
+      }
+       .nav-links a:after {
+         display: none; /* Hide underline effect on mobile */
+       }
+       .nav-links a:hover {
+         background-color: var(--gray-light); /* Add hover background */
+         color: var(--primary-color); /* Ensure hover color is primary */
+       }
+
+
+      .auth-buttons {
+        display: none; /* Hide auth buttons in mobile nav bar */
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+        text-align: center; /* Center hero text */
+      }
+      .hero p {
+          font-size: 1.1rem;
+          text-align: center; /* Center hero text */
+      }
+      .hero-buttons {
+          justify-content: center; /* Center hero buttons */
+      }
+
+      .feature-card, .dish-card {
+        margin-bottom: 20px;
+        max-width: none; /* Allow cards to take more width */
+      }
+      .footer-content {
+        grid-template-columns: 1fr; /* Stack footer columns */
+        text-align: center; /* Center text */
+      }
+      .footer-column h3::after {
+         left: 50%; /* Center underline */
+         transform: translateX(-50%);
+      }
+      .footer-links a {
+         display: block; /* Make links full width */
+         padding-left: 0;
+         text-align: center;
+      }
+      .footer-links a::before {
+         display: none; /* Hide arrow */
+      }
+      .footer-links a:hover {
+         padding-left: 0;
+      }
+      .social-links {
+         justify-content: center; /* Center social icons */
+      }
+    }
+
+    /* Extra small screens */
+     @media (max-width: 480px) {
+         .hero h1 {
+             font-size: 2.2rem; /* Further reduce hero title */
+         }
+         .section-title h2 {
+             font-size: 2rem;
+         }
+         .btn {
+             padding: 12px 25px; /* Slightly larger buttons */
+             font-size: 1rem;
+         }
+         /* Ensure animated button is still reasonably sized */
+         #hero-get-started-btn {
+             padding: 14px 35px; /* Make the jumping button slightly larger */
+             font-size: 1.05rem;
+         }
+         .preferences-form {
+             padding: 25px; /* Reduce form padding */
+         }
+         .checkbox-group, .radio-group {
+             gap: 15px; /* Reduce gap between options */
+         }
+     }
+
+  </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <nav>
-        <a href="index.html" class="logo">
-          <i class="fa-solid fa-burger"></i> Nom<span>Nom</span>
-        </a>
-        <div class="menu-toggle"> <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <ul class="nav-links"> <li><a href="#preferences">My Preferences</a></li>
-            <li><a href="#recommendations">Recommendations</a></li>
-            <li><a href="#howitworks">How It Works</a></li>
-            <li><a href="#contact">Contact</a></li>
-            </ul>
-        <div class="auth-buttons">
-          <a href="profile.html" class="btn btn-secondary"><i class="fa-solid fa-right-to-bracket"></i> Log In</a>
-          <a href="profile.html" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
-        </div>
-      </nav>
-    </div>
-  </header>
+  <header>
+    <div class="container">
+      <nav>
+        <a href="index.html" class="logo">
+          <i class="fa-solid fa-burger"></i> Nom<span>Nom</span>
+        </a>
+        <div class="menu-toggle"> <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-links"> <li><a href="#preferences">My Preferences</a></li>
+            <li><a href="#recommendations">Recommendations</a></li>
+            <li><a href="#howitworks">How It Works</a></li>
+            <li><a href="#contact">Contact</a></li>
+            </ul>
+        <div class="auth-buttons">
+          <a href="profile.html" class="btn btn-secondary"><i class="fa-solid fa-right-to-bracket"></i> Log In</a>
+          <a href="profile.html" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
+        </div>
+      </nav>
+    </div>
+  </header>
 
-  <section class="hero">
-    <div class="container">
-      <div class="hero-content animate__animated animate__fadeInUp">
-        <h1>Discover Food That Matches Your Cravings</h1>
-        <p>NomNom uses AI and your personal taste data to recommend dishes and restaurants around you.</p>
-        <div class="hero-buttons">
-          <a href="survey.html" id="hero-get-started-btn" class="btn btn-primary"><i class="fa-solid fa-utensils"></i> Get Started</a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content animate__animated animate__fadeInUp">
+        <h1>Discover Food That Matches Your Cravings</h1>
+        <p>NomNom uses AI and your personal taste data to recommend dishes and restaurants around you.</p>
+        <div class="hero-buttons">
+          <a href="survey.html" id="hero-get-started-btn" class="btn btn-primary"><i class="fa-solid fa-utensils"></i> Get Started</a>
+          <a href="#howitworks" class="btn btn-secondary"><i class="fa-solid fa-circle-info"></i> Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <section class="features" id="howitworks">
-    <div class="container">
-      <div class="section-title">
-        <h2>How NomNom Works</h2>
-        <p>Personalized food discovery in simple steps</p>
-      </div>
-      <div class="feature-flow">
-        <div class="feature-card animate__animated animate__fadeInUp" data-wow-delay="0.1s">
-          <div class="feature-icon"><i class="fa-solid fa-list-check"></i></div>
-          <h3>Set Preferences</h3>
-          <p>Tell us your favorite cuisines, spice levels, and dietary needs.</p>
-        </div>
-        <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
-        <div class="feature-card animate__animated animate__fadeInUp" data-wow-delay="0.3s">
-          <div class="feature-icon"><i class="fa-solid fa-pen-to-square"></i></div>
-          <h3>Take Survey</h3>
-          <p>Answer a few quick questions about what you're craving right now.</p>
-        </div>
-        <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
-        <div class="feature-card animate__animated animate__fadeInUp" data-wow-delay="0.5s">
-          <div class="feature-icon"><i class="fa-solid fa-robot"></i></div>
-          <h3>Get Matched</h3>
-          <p>Our AI analyzes your input and suggests the perfect local dishes.</p>
-        </div>
-        <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
-         <div class="feature-card animate__animated animate__fadeInUp" data-wow-delay="0.7s">
-          <div class="feature-icon"><i class="fa-solid fa-utensils"></i></div>
-          <h3>Discover & Enjoy</h3>
-          <p>Find your recommended meal nearby and satisfy your craving!</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section class="features" id="howitworks">
+    <div class="container">
+      <div class="section-title">
+        <h2>How NomNom Works</h2>
+        <p>Personalized food discovery in simple steps</p>
+      </div>
+      <div class="feature-flow">
+        <div class="feature-card animate__animated animate__fadeInUp" data-wow-delay="0.1s">
+          <div class="feature-icon"><i class="fa-solid fa-list-check"></i></div>
+          <h3>Set Preferences</h3>
+          <p>Tell us your favorite cuisines, spice levels, and dietary needs.</p>
+        </div>
+        <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="feature-card animate__animated animate__fadeInUp" data-wow-delay="0.3s">
+          <div class="feature-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+          <h3>Take Survey</h3>
+          <p>Answer a few quick questions about what you're craving right now.</p>
+        </div>
+        <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="feature-card animate__animated animate__fadeInUp" data-wow-delay="0.5s">
+          <div class="feature-icon"><i class="fa-solid fa-robot"></i></div>
+          <h3>Get Matched</h3>
+          <p>Our AI analyzes your input and suggests the perfect local dishes.</p>
+        </div>
+        <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+         <div class="feature-card animate__animated animate__fadeInUp" data-wow-delay="0.7s">
+          <div class="feature-icon"><i class="fa-solid fa-utensils"></i></div>
+          <h3>Discover & Enjoy</h3>
+          <p>Find your recommended meal nearby and satisfy your craving!</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <section class="preferences" id="preferences">
-    <div class="container">
-      <div class="section-title">
-        <h2>Your Food Preferences</h2>
-        <p>Refine your profile so we can serve you better recommendations</p>
-      </div>
-      <div class="preferences-form animate__animated animate__fadeInUp">
-        <form>
-          <div class="form-group">
-            <label>Favorite Cuisines (Select all that apply)</label>
-            <div class="checkbox-group">
-              <div class="checkbox-item">
-                <input type="checkbox" id="pref-italian" name="cuisine" value="italian">
-                <label for="pref-italian">Italian</label>
-              </div>
-              <div class="checkbox-item">
-                <input type="checkbox" id="pref-chinese" name="cuisine" value="chinese">
-                <label for="pref-chinese">Chinese</label>
-              </div>
-               <div class="checkbox-item">
-                 <input type="checkbox" id="pref-malaysian" name="cuisine" value="malaysian">
-                 <label for="pref-malaysian">Malaysian</label>
-               </div>
-              <div class="checkbox-item">
-                <input type="checkbox" id="pref-mexican" name="cuisine" value="mexican">
-                <label for="pref-mexican">Mexican</label>
-              </div>
-              <div class="checkbox-item">
-                <input type="checkbox" id="pref-indian" name="cuisine" value="indian">
-                <label for="pref-indian">Indian</label>
-              </div>
-              <div class="checkbox-item">
-                <input type="checkbox" id="pref-thai" name="cuisine" value="thai">
-                <label for="pref-thai">Thai</label>
-              </div>
-               <div class="checkbox-item">
-                 <input type="checkbox" id="pref-japanese" name="cuisine" value="japanese">
-                 <label for="pref-japanese">Japanese</label>
-               </div>
-               <div class="checkbox-item">
-                 <input type="checkbox" id="pref-western" name="cuisine" value="western">
-                 <label for="pref-western">Western</label>
-               </div>
-              </div>
-          </div>
-          <div class="form-group">
-            <label>Dietary Preferences (Select all that apply)</label>
-            <div class="checkbox-group">
-              <div class="checkbox-item">
-                <input type="checkbox" id="pref-vegetarian" name="diet" value="vegetarian">
-                <label for="pref-vegetarian">Vegetarian</label>
-              </div>
-              <div class="checkbox-item">
-                <input type="checkbox" id="pref-vegan" name="diet" value="vegan">
-                <label for="pref-vegan">Vegan</label>
-              </div>
-              <div class="checkbox-item">
-                <input type="checkbox" id="pref-glutenfree" name="diet" value="glutenfree">
-                <label for="pref-glutenfree">Gluten-Free</label>
-              </div>
-               <div class="checkbox-item">
-                 <input type="checkbox" id="pref-halal" name="diet" value="halal">
-                 <label for="pref-halal">Halal</label>
-               </div>
-               <div class="checkbox-item">
-                 <input type="checkbox" id="pref-nutfree" name="diet" value="nutfree">
-                 <label for="pref-nutfree">Nut-Free</label>
-               </div>
-              </div>
-          </div>
-          <div class="form-group">
-            <label>Preferred Spice Level (Select one)</label>
-            <div class="radio-group">
-              <div class="radio-item">
-                <input type="radio" id="pref-nospice" name="spice" value="nospice">
-                <label for="pref-nospice">Not Spicy</label>
-              </div>
-              <div class="radio-item">
-                <input type="radio" id="pref-mild" name="spice" value="mild">
-                <label for="pref-mild">Mild</label>
-              </div>
-              <div class="radio-item">
-                <input type="radio" id="pref-medium" name="spice" value="medium" checked> <label for="pref-medium">Medium</label>
-              </div>
-              <div class="radio-item">
-                <input type="radio" id="pref-spicy" name="spice" value="spicy">
-                <label for="pref-spicy">Spicy</label>
-              </div>
-              <div class="radio-item">
-                <input type="radio" id="pref-veryspicy" name="spice" value="veryspicy">
-                <label for="pref-veryspicy">Very Spicy</label>
-              </div>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Preferences</button>
-        </form>
-      </div>
-    </div>
-  </section>
+  <section class="preferences" id="preferences">
+    <div class="container">
+      <div class="section-title">
+        <h2>Your Food Preferences</h2>
+        <p>Refine your profile so we can serve you better recommendations</p>
+      </div>
+      <div class="preferences-form animate__animated animate__fadeInUp">
+        <form>
+          <div class="form-group">
+            <label>Favorite Cuisines (Select all that apply)</label>
+            <div class="checkbox-group">
+              <div class="checkbox-item">
+                <input type="checkbox" id="pref-italian" name="cuisine" value="italian">
+                <label for="pref-italian">Italian</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" id="pref-chinese" name="cuisine" value="chinese">
+                <label for="pref-chinese">Chinese</label>
+              </div>
+               <div class="checkbox-item">
+                 <input type="checkbox" id="pref-malaysian" name="cuisine" value="malaysian">
+                 <label for="pref-malaysian">Malaysian</label>
+               </div>
+              <div class="checkbox-item">
+                <input type="checkbox" id="pref-mexican" name="cuisine" value="mexican">
+                <label for="pref-mexican">Mexican</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" id="pref-indian" name="cuisine" value="indian">
+                <label for="pref-indian">Indian</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" id="pref-thai" name="cuisine" value="thai">
+                <label for="pref-thai">Thai</label>
+              </div>
+               <div class="checkbox-item">
+                 <input type="checkbox" id="pref-japanese" name="cuisine" value="japanese">
+                 <label for="pref-japanese">Japanese</label>
+               </div>
+               <div class="checkbox-item">
+                 <input type="checkbox" id="pref-western" name="cuisine" value="western">
+                 <label for="pref-western">Western</label>
+               </div>
+              </div>
+          </div>
+          <div class="form-group">
+            <label>Dietary Preferences (Select all that apply)</label>
+            <div class="checkbox-group">
+              <div class="checkbox-item">
+                <input type="checkbox" id="pref-vegetarian" name="diet" value="vegetarian">
+                <label for="pref-vegetarian">Vegetarian</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" id="pref-vegan" name="diet" value="vegan">
+                <label for="pref-vegan">Vegan</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" id="pref-glutenfree" name="diet" value="glutenfree">
+                <label for="pref-glutenfree">Gluten-Free</label>
+              </div>
+               <div class="checkbox-item">
+                 <input type="checkbox" id="pref-halal" name="diet" value="halal">
+                 <label for="pref-halal">Halal</label>
+               </div>
+               <div class="checkbox-item">
+                 <input type="checkbox" id="pref-nutfree" name="diet" value="nutfree">
+                 <label for="pref-nutfree">Nut-Free</label>
+               </div>
+              </div>
+          </div>
+          <div class="form-group">
+            <label>Preferred Spice Level (Select one)</label>
+            <div class="radio-group">
+              <div class="radio-item">
+                <input type="radio" id="pref-nospice" name="spice" value="nospice">
+                <label for="pref-nospice">Not Spicy</label>
+              </div>
+              <div class="radio-item">
+                <input type="radio" id="pref-mild" name="spice" value="mild">
+                <label for="pref-mild">Mild</label>
+              </div>
+              <div class="radio-item">
+                <input type="radio" id="pref-medium" name="spice" value="medium" checked> <label for="pref-medium">Medium</label>
+              </div>
+              <div class="radio-item">
+                <input type="radio" id="pref-spicy" name="spice" value="spicy">
+                <label for="pref-spicy">Spicy</label>
+              </div>
+              <div class="radio-item">
+                <input type="radio" id="pref-veryspicy" name="spice" value="veryspicy">
+                <label for="pref-veryspicy">Very Spicy</label>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Preferences</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="recommendations" id="recommendations">
+    <div class="container">
+      <div class="section-title">
+        <h2>Featured Dishes Near You</h2>
+        <p>Popular recommendations based on user preferences in Semenyih</p>
+      </div>
+      <div class="recommendations-grid">
+        <div class="dish-card animate__animated animate__fadeInUp">
+          <div class="dish-thumb">
+             <img src="https://placehold.co/600x400/FF6B6B/white?text=Nasi+Lemak" alt="Nasi Lemak Special" onerror="this.src='https://placehold.co/600x400/cccccc/ffffff?text=Image+Not+Found'"/>
+          </div>
+          <div class="dish-info">
+            <h3>Nasi Lemak Special</h3>
+            <p>Fragrant coconut rice served with spicy sambal, anchovies, peanuts, and egg. A local favorite!</p>
+          </div>
+        </div>
+        <div class="dish-card animate__animated animate__fadeInUp" data-wow-delay="0.2s">
+          <div class="dish-thumb">
+             <img src="https://placehold.co/600x400/FFD166/black?text=Roti+Canai" alt="Crispy Roti Canai" onerror="this.src='https://placehold.co/600x400/cccccc/ffffff?text=Image+Not+Found'"/>
+          </div>
+          <div class="dish-info">
+            <h3>Crispy Roti Canai</h3>
+            <p>Flaky flatbread served with delicious dhal curry or chicken curry.</p>
+          </div>
+        </div>
+        <div class="dish-card animate__animated animate__fadeInUp" data-wow-delay="0.4s">
+          <div class="dish-thumb">
+             <img src="https://placehold.co/600x400/4ECDC4/white?text=Satay+Skewers" alt="Chicken Satay Skewers" onerror="this.src='https://placehold.co/600x400/cccccc/ffffff?text=Image+Not+Found'"/>
+          </div>
+          <div class="dish-info">
+            <h3>Chicken Satay Skewers</h3>
+            <p>Grilled marinated chicken skewers served with rich peanut sauce.</p>
+          </div>
+        </div>
+         <div class="dish-card animate__animated animate__fadeInUp" data-wow-delay="0.6s">
+          <div class="dish-thumb">
+             <img src="https://placehold.co/600x400/292F36/white?text=Char+Kway+Teow" alt="Penang Char Kway Teow" onerror="this.src='https://placehold.co/600x400/cccccc/ffffff?text=Image+Not+Found'"/>
+          </div>
+          <div class="dish-info">
+            <h3>Penang Char Kway Teow</h3>
+            <p>Stir-fried flat rice noodles with prawns, cockles, bean sprouts, and chives.</p>
+          </div>
+        </div>
+        </div>
+       <div style="text-align: center; margin-top: 40px;">
+         <a href="survey.html" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Find More Dishes</a>
+       </div>
+    </div>
+  </section>
 
   <footer id="contact">
     <div class="container">
