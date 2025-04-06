@@ -932,8 +932,6 @@
     const questionGroups = document.querySelectorAll(".survey-question .button-group");
     const totalQuestions = questionGroups.length;
 
-    const submitButton = document.getElementById("submitSurvey");
-    
     const footer = document.querySelector("footer");
 
     // --- State ---
@@ -955,133 +953,91 @@
     }
 
     function updateProgress() {
-        let answeredQuestions = 0;
-        for (const key in userSelections) {
-            if (userSelections[key]) {
-                answeredQuestions++;
-            }
+      let answeredQuestions = 0;
+      for (const key in userSelections) {
+        if (userSelections[key]) {
+          answeredQuestions++;
         }
-        const percent = Math.round((answeredQuestions / totalQuestions) * 100);
+      }
+      const percent = Math.round((answeredQuestions / totalQuestions) * 100);
 
-        function updateProgress() {
-        let answeredQuestions = 0;
-        for (const key in userSelections) {
-            if (userSelections[key]) {
-                answeredQuestions++;
-            }
+      // Enable submit button only when all questions are answered
+      submitButton.disabled = answeredQuestions !== totalQuestions; // Ensure all questions are answered
+      submitButton.style.opacity = submitButton.disabled ? 0.6 : 1;
+      submitButton.style.cursor = submitButton.disabled ? 'not-allowed' : 'pointer';
+
+      updateResultsPreview(); // Update preview whenever progress changes
+    }
+
+    function updateResultsPreview() {
+      selectedPreferencesDiv.innerHTML = ''; // Clear previous badges
+      let hasSelection = false;
+
+      // Define icons for each category (optional, but nice)
+      const categoryIcons = {
+        spice: 'fa-solid fa-pepper-hot',
+        cuisine: 'fa-solid fa-earth-asia',
+        taste: 'fa-solid fa-cookie-bite',
+        diet: 'fa-solid fa-carrot'
+      };
+
+      for (const key in userSelections) {
+        if (userSelections[key]) {
+          hasSelection = true;
+          const badge = document.createElement('div');
+          badge.classList.add('result-badge');
+          const iconClass = categoryIcons[key] || 'fa-solid fa-check'; // Default icon
+          badge.innerHTML = `<i class="${iconClass}"></i> ${userSelections[key]}`;
+          selectedPreferencesDiv.appendChild(badge);
         }
-        // Enable submit button only when all questions are answered
-        submitButton.disabled = answeredQuestions !== 4; // Ensure 4 questions are answered
-        submitButton.style.opacity = submitButton.disabled ? 0.6 : 1;
-        submitButton.style.cursor = submitButton.disabled ? 'not-allowed' : 'pointer';
+      }
+
+      // Show or hide the preview section
+      resultsPreview.style.display = hasSelection ? 'block' : 'none';
     }
 
     // Handle the option click and update the user selections
     function handleOptionClick(event) {
-        const button = event.target.closest('.option-button');
-        if (!button) return;
+      const button = event.target.closest('.option-button');
+      if (!button) return; // Exit if click wasn't on a button
 
-        const parentGroup = button.closest('.button-group');
-        const questionKey = parentGroup.id.replace('Options', ''); // e.g., 'spicy', 'cuisine'
+      const parentGroup = button.closest('.button-group');
+      const questionKey = parentGroup.id.replace('Options', ''); // e.g., 'spicy', 'cuisine'
 
-        // Remove 'selected' from siblings in the same group
-        parentGroup.querySelectorAll('.option-button').forEach(btn => {
-            btn.classList.remove('selected');
-        });
+      // Remove 'selected' from siblings in the same group
+      parentGroup.querySelectorAll('.option-button').forEach(btn => {
+        btn.classList.remove('selected');
+      });
 
-        // Add 'selected' to the clicked button
-        button.classList.add('selected');
+      // Add 'selected' to the clicked button
+      button.classList.add('selected');
 
-        // Store the selection (using data attribute)
-        const selectedValue = button.dataset.spice || button.dataset.cuisine || button.dataset.taste || button.dataset.diet;
-        userSelections[questionKey] = selectedValue;
+      // Store the selection (using data attribute)
+      const selectedValue = button.dataset.spice || button.dataset.cuisine || button.dataset.taste || button.dataset.diet;
+      userSelections[questionKey] = selectedValue;
 
-        // Update progress
-        updateProgress();
+      // Update progress and preview
+      updateProgress();
     }
 
     // Set event listeners for all option buttons
-    const questionGroups = document.querySelectorAll(".survey-question .button-group");
     questionGroups.forEach(group => {
-        group.addEventListener('click', handleOptionClick);
+      group.addEventListener('click', handleOptionClick);
     });
 
     // Handle form submission
-    document.getElementById("surveyForm").addEventListener("submit", function(e) {
-        e.preventDefault();
+    surveyForm.addEventListener("submit", function(e) {
+      e.preventDefault();
 
-        if (submitButton.disabled) {
-            alert("Please answer all questions before submitting.");
-            return;
-        }
+      if (submitButton.disabled) {
+        alert("Please answer all questions before submitting.");
+        return;
+      }
 
-        // Build query string for GET request
-        const queryString = new URLSearchParams(userSelections).toString();
-        window.location.href = `results.html?${queryString}`;
+      // Build query string for GET request
+      const queryString = new URLSearchParams(userSelections).toString();
+      window.location.href = `results.html?${queryString}`;
     });
-
-    // Initialize progress
-    updateProgress();
-});
-        // Enable submit button only when all questions are answered
-        submitButton.disabled = answeredQuestions !== totalQuestions;
-        submitButton.style.opacity = submitButton.disabled ? 0.6 : 1;
-        submitButton.style.cursor = submitButton.disabled ? 'not-allowed' : 'pointer';
-
-        updateResultsPreview(); // Update preview whenever progress changes
-    }
-
-
-    function updateResultsPreview() {
-        selectedPreferencesDiv.innerHTML = ''; // Clear previous badges
-        let hasSelection = false;
-
-        // Define icons for each category (optional, but nice)
-        const categoryIcons = {
-            spice: 'fa-solid fa-pepper-hot',
-            cuisine: 'fa-solid fa-earth-asia',
-            taste: 'fa-solid fa-cookie-bite',
-            diet: 'fa-solid fa-carrot'
-        };
-
-        for (const key in userSelections) {
-            if (userSelections[key]) {
-                hasSelection = true;
-                const badge = document.createElement('div');
-                badge.classList.add('result-badge');
-                const iconClass = categoryIcons[key] || 'fa-solid fa-check'; // Default icon
-                badge.innerHTML = `<i class="${iconClass}"></i> ${userSelections[key]}`;
-                selectedPreferencesDiv.appendChild(badge);
-            }
-        }
-
-        // Show or hide the preview section
-        resultsPreview.style.display = hasSelection ? 'block' : 'none';
-    }
-
-
-    function handleOptionClick(event) {
-        const button = event.target.closest('.option-button');
-        if (!button) return; // Exit if click wasn't on a button
-
-        const parentGroup = button.closest('.button-group');
-        const questionKey = parentGroup.id.replace('Options', ''); // e.g., 'spicy', 'cuisine'
-
-        // Remove 'selected' from siblings in the same group
-        parentGroup.querySelectorAll('.option-button').forEach(btn => {
-            btn.classList.remove('selected');
-        });
-
-        // Add 'selected' to the clicked button
-        button.classList.add('selected');
-
-        // Store the selection (using data attribute)
-        const selectedValue = button.dataset.spice || button.dataset.cuisine || button.dataset.taste || button.dataset.diet;
-        userSelections[questionKey] = selectedValue;
-
-        // Update progress and preview
-        updateProgress();
-    }
 
     // --- Initial Setup & Flow ---
 
@@ -1158,9 +1114,7 @@
             loadingMessage.classList.add("animate__fadeIn");
              msgIndex++;
          }, msgIndex > 0 ? 500 : 0); // No delay for the first message fade-in
-
       }
-
 
       // Start the message sequence
       loadingMessage.classList.add("animate__fadeIn"); // Initial fade-in for the container itself
@@ -1180,39 +1134,11 @@
         // Make survey visible with animation
         surveyContainer.classList.add("visible");
 
-        // Add event listeners for survey options
-        questionGroups.forEach(group => {
-            group.addEventListener('click', handleOptionClick);
-        });
-
         // Initialize progress and preview (to show 0% and hide preview initially)
         updateProgress();
     }
 
-
-    // 4. Form Submission
-    surveyForm.addEventListener("submit", function(e) {
-      e.preventDefault();
-      if (submitButton.disabled) {
-          alert("Please answer all questions before submitting.");
-          return;
-      }
-
-      console.log("Survey Submitted! Preferences:", userSelections);
-      // Here you would typically send 'userSelections' to a server
-      // For now, just show an alert or redirect
-      alert(`Finding the perfect ${userSelections.taste} ${userSelections.cuisine} ${getMealType().toLowerCase()} for you... (Spice: ${userSelections.spice}, Diet: ${userSelections.diet})`);
-
-      // Optional: Show loading indicator again, then results page
-      // loadingOverlay.style.display = 'flex';
-      // loadingMessage.textContent = 'Finding your perfect meal...';
-      // // Simulate API call
-      // setTimeout(() => {
-      //    window.location.href = 'results.html'; // Redirect to a results page
-      // }, 2000);
-    });
-
-    // 5. Footer Animation
+    // 4. Footer Animation
     const footerObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -1226,7 +1152,6 @@
 
     // --- Start the flow ---
     startHelloAnimation();
-
   });
 </script>
 </body>
