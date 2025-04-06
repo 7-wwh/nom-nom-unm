@@ -332,9 +332,34 @@
         text-align: center;
       }
     }
+    
+    /* Hello Animation Styles */
+    #hello-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--light-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+    
+    #hello-overlay h1 {
+      font-size: 4rem;
+      color: var(--primary-color);
+      opacity: 0;
+    }
   </style>
 </head>
 <body>
+  <!-- Hello Animation Overlay -->
+  <div id="hello-overlay">
+    <h1 id="helloText" class="animate__animated">Hello!</h1>
+  </div>
+
   <!-- Header & Navigation -->
   <header>
     <div class="container">
@@ -418,5 +443,27 @@
       </div>
     </div>
   </footer>
+  
+  <!-- JavaScript for Animation -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const helloText = document.getElementById("helloText");
+      // Start with a fadeInDown animation
+      helloText.classList.add("animate__fadeInDown");
+      helloText.style.opacity = 1;
+      
+      // After 2 seconds, animate out using fadeOutUp
+      setTimeout(function() {
+        helloText.classList.remove("animate__fadeInDown");
+        helloText.classList.add("animate__fadeOutUp");
+      }, 2000);
+      
+      // Remove the overlay from the DOM after the animation completes (approx 2.5 seconds)
+      setTimeout(function() {
+        const overlay = document.getElementById("hello-overlay");
+        overlay.parentNode.removeChild(overlay);
+      }, 2500);
+    });
+  </script>
 </body>
 </html>
