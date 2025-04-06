@@ -6,7 +6,7 @@
   <title>NomNom - Personalized Food Survey</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
   <style>
     :root {
       --primary-color: #ff6b6b;
@@ -16,6 +16,7 @@
       --light-color: #f7fff7;
       --accent-color: #4ecdc4;
       --shadow-md: 0 5px 15px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
       --transition: all 0.3s ease;
     }
     
@@ -23,7 +24,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Poppins', sans-serif;
     }
     
     body {
@@ -316,25 +317,72 @@
     }
     
     /* Hello Overlay */
+    #hello-overlay {
+      background: linear-gradient(135deg, #ff6b6b12, #ffd16612);
+    }
+    
+    #hello-overlay .hello-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #hello-overlay .logo-large {
+      font-size: 5rem;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      opacity: 0;
+    }
+    
+    #hello-overlay .logo-large span {
+      color: var(--secondary-color);
+    }
+    
     #hello-overlay h1 {
-      font-size: 4rem;
+      font-size: 3.5rem;
       color: var(--primary-color);
       opacity: 0;
     }
     
-    /* Loader Overlay */
+    #hello-overlay p {
+      font-size: 1.5rem;
+      color: var(--dark-color);
+      margin-top: 15px;
+      opacity: 0;
+    }
+    
+    /* Loading Overlay */
     #loading-overlay {
       background: linear-gradient(135deg, #f7fff7, #e0f7fa);
     }
     
-    #loading-overlay .loader {
-      border: 8px solid #f3f3f3;
+    .loader-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 30px;
+    }
+    
+    .loader {
+      border: 8px solid rgba(255, 107, 107, 0.2);
       border-top: 8px solid var(--primary-color);
       border-radius: 50%;
       width: 80px;
       height: 80px;
-      animation: spin 1s linear infinite;
-      margin-bottom: 20px;
+      animation: spin 1.5s linear infinite;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+    
+    .loader-icon {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      animation: pulse 2s ease infinite;
     }
     
     @keyframes spin {
@@ -342,75 +390,362 @@
       100% { transform: rotate(360deg); }
     }
     
-    #loading-overlay .loading-message {
+    @keyframes pulse {
+      0% { transform: scale(0.8); opacity: 0.7; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(0.8); opacity: 0.7; }
+    }
+    
+    .loading-message-container {
+      height: 80px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #loadingMessage {
       font-size: 1.5rem;
       color: var(--dark-color);
       max-width: 90%;
+      transition: opacity 0.5s ease;
+    }
+    
+    .loading-info {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      align-items: center;
+      background: rgba(255,255,255,0.7);
+      padding: 10px 15px;
+      border-radius: 30px;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .loading-progress {
+      width: 200px;
+      height: 10px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .loading-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--primary-color);
+      border-radius: 10px;
+      transition: width 0.3s ease;
     }
     
     /* Survey Container */
     #survey-container {
-      padding: 40px 20px;
+      padding: 40px;
       background: #fff;
-      box-shadow: var(--shadow-md);
-      border-radius: 10px;
-      margin-top: 20px; /* Add margin to separate from main content */
+      box-shadow: var(--shadow-lg);
+      border-radius: 20px;
+      margin-top: 20px;
       width: 90%;
-      max-width: 600px;
+      max-width: 650px;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+    
+    #survey-container.visible {
+      transform: translateY(0);
+      opacity: 1;
     }
     
     #survey-container h2 {
-      margin-bottom: 20px;
-      color: var(--primary-color);
+      margin-bottom: 30px;
+      color: var(--dark-color);
       text-align: center;
+      font-weight: 600;
+      font-size: 2rem;
     }
     
     .survey-question {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
+      padding-bottom: 25px;
+      border-bottom: 1px dashed #eee;
+    }
+    
+    .survey-question:last-of-type {
+      border-bottom: none;
     }
     
     .survey-question p {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
+      margin-bottom: 15px;
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--dark-color);
+    }
+    
+    .question-icon {
+      color: var(--accent-color);
+      margin-right: 8px;
     }
     
     .button-group {
       display: flex;
       flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .option-button {
+      flex: 1 0 calc(33.333% - 12px);
+      min-width: 150px;
+      padding: 15px 10px;
+      font-size: 1rem;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      cursor: pointer;
+      background-color: white;
+      color: var(--dark-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    
+    .option-button:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .option-button.selected {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    
+    .option-button i {
+      font-size: 1.2rem;
+    }
+    
+    .progress-container {
+      margin-bottom: 30px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background-color: #eee;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      width: 25%;
+      background-color: var(--accent-color);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #777;
+    }
+    
+    .submit-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+    
+    .submit-button {
+      padding: 15px 40px;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+      display: inline-flex;
+      align-items: center;
       gap: 10px;
     }
     
-    .button-group button {
-      flex: 1;
-      padding: 15px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: var(--primary-color);
-      color: #fff;
-      transition: var(--transition);
+    .submit-button:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
     }
     
-    .button-group button:hover {
-      background-color: var(--primary-dark);
+    .submit-button i {
+      font-size: 1.2rem;
+    }
+    
+    /* Results preview section */
+    .results-preview {
+      background: linear-gradient(135deg, rgba(255,107,107,0.05), rgba(255,209,102,0.05));
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 30px;
+      display: none;
+    }
+    
+    .results-preview h3 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+    
+    .results-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .result-badge {
+      background: white;
+      border-radius: 30px;
+      padding: 8px 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      font-weight: 500;
+    }
+    
+    .result-badge i {
+      color: var(--primary-color);
+    }
+    
+    /* Time-based greeting */
+    .time-greeting {
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+    
+    /* Speech bubble tooltip */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    
+    .tooltip-icon {
+      color: var(--accent-color);
+      font-size: 1rem;
+    }
+    
+    .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background-color: var(--dark-color);
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 10px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+      font-weight: normal;
+    }
+    
+    .tooltip-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--dark-color) transparent transparent transparent;
+    }
+    
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
     }
     
     /* Responsive adjustments */
     @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .menu-toggle { display: flex; }
+      .nav-links { 
+        display: none;
+      }
+      
+      .menu-toggle {
+        display: flex;
+      }
+      
+      #survey-container {
+        padding: 30px 20px;
+      }
+      
+      .option-button {
+        flex: 1 0 calc(50% - 10px);
+      }
+      
+      #hello-overlay h1 {
+        font-size: 2.5rem;
+      }
+      
+      #hello-overlay p {
+        font-size: 1.2rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .option-button {
+        flex: 1 0 100%;
+      }
+      
+      .auth-buttons {
+        display: none;
+      }
+      
+      #hello-overlay h1 {
+        font-size: 2rem;
+      }
+      
+      #hello-overlay p {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
 <body>
   <div id="hello-overlay" class="overlay">
-    <h1 id="helloText" class="animate__animated">Hello!</h1>
+    <div class="hello-content">
+      <div class="logo-large animate__animated" id="logoLarge">
+        <i class="fa-solid fa-burger"></i> Nom<span>Nom</span>
+      </div>
+      <h1 id="helloText" class="animate__animated">Hello, Foodie!</h1>
+      <p id="helloSubtext" class="animate__animated">Let's discover your perfect meal today</p>
+    </div>
   </div>
   
   <div id="loading-overlay" class="overlay" style="display:none;">
-    <div class="loader"></div>
-    <div id="loadingMessage" class="loading-message">Loading...</div>
+    <div class="loader-container">
+      <div class="loader"></div>
+      <i class="fa-solid fa-utensils loader-icon"></i>
+    </div>
+    <div class="loading-message-container">
+      <div id="loadingMessage" class="animate__animated">Loading your food profile...</div>
+    </div>
+    <div class="loading-info">
+      <div id="loadingProgressText">Analyzing...</div>
+      <div class="loading-progress">
+        <div class="loading-bar" id="loadingProgressBar"></div>
+      </div>
+    </div>
   </div>
   
   <header>
@@ -441,52 +776,78 @@
   
   <main>
     <div class="container">
-      <h2 style="text-align:center; margin-bottom:20px;">Page Title</h2>
-      <p style="text-align:center;">This is an empty page. Add your content here.</p>
-      
       <div id="survey-container">
-        <h2>Food Preferences Survey</h2>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="surveyProgress"></div>
+          </div>
+          <div class="progress-text">
+            <span>Question <span id="currentQuestion">1</span> of 4</span>
+            <span><span id="completionPercent">25</span>% complete</span>
+          </div>
+        </div>
+        
+        <h2>Find Your Perfect <span class="time-greeting" id="mealTypeHeader">Meal</span></h2>
+        
         <form id="surveyForm">
           <div class="survey-question">
-            <p id="spicyQuestion">How spicy do you want your meal?</p>
+            <p><i class="fa-solid fa-pepper-hot question-icon"></i> How spicy do you want your <span id="mealTypeText">meal</span>?
+              <span class="tooltip">
+                <i class="fa-solid fa-circle-question tooltip-icon"></i>
+                <span class="tooltip-text">This helps us determine the heat level of your dish recommendations</span>
+              </span>
+            </p>
             <div class="button-group" id="spicyOptions">
-              <button type="button" data-spice="Not Spicy">Not Spicy</button>
-              <button type="button" data-spice="Mild">Mild</button>
-              <button type="button" data-spice="Medium">Medium</button>
-              <button type="button" data-spice="Hot">Hot</button>
-              <button type="button" data-spice="Extra Hot">Extra Hot</button>
+              <button type="button" class="option-button" data-spice="Not Spicy"><i class="fa-solid fa-snowflake"></i> Not Spicy</button>
+              <button type="button" class="option-button" data-spice="Mild"><i class="fa-solid fa-temperature-low"></i> Mild</button>
+              <button type="button" class="option-button" data-spice="Medium"><i class="fa-solid fa-temperature-half"></i> Medium</button>
+              <button type="button" class="option-button" data-spice="Hot"><i class="fa-solid fa-fire"></i> Hot</button>
+              <button type="button" class="option-button" data-spice="Extra Hot"><i class="fa-solid fa-fire-flame-curved"></i> Extra Hot</button>
             </div>
           </div>
+          
           <div class="survey-question">
-            <p>Which cuisine are you in the mood for?</p>
-            <div class="button-group">
-              <button type="button" data-cuisine="Local">Local</button>
-              <button type="button" data-cuisine="Italian">Italian</button>
-              <button type="button" data-cuisine="Chinese">Chinese</button>
-              <button type="button" data-cuisine="Mexican">Mexican</button>
-              <button type="button" data-cuisine="Indian">Indian</button>
-              <button type="button" data-cuisine="Fusion">Fusion</button>
+            <p><i class="fa-solid fa-earth-asia question-icon"></i> Which cuisine are you in the mood for today?</p>
+            <div class="button-group" id="cuisineOptions">
+              <button type="button" class="option-button" data-cuisine="Local"><i class="fa-solid fa-location-dot"></i> Local</button>
+              <button type="button" class="option-button" data-cuisine="Italian"><i class="fa-solid fa-pizza-slice"></i> Italian</button>
+              <button type="button" class="option-button" data-cuisine="Chinese"><i class="fa-solid fa-bowl-food"></i> Chinese</button>
+              <button type="button" class="option-button" data-cuisine="Mexican"><i class="fa-solid fa-pepper-hot"></i> Mexican</button>
+              <button type="button" class="option-button" data-cuisine="Indian"><i class="fa-solid fa-mortar-pestle"></i> Indian</button>
+              <button type="button" class="option-button" data-cuisine="Fusion"><i class="fa-solid fa-utensils"></i> Fusion</button>
             </div>
           </div>
+          
           <div class="survey-question">
-            <p>Are you craving something sweet or savory?</p>
-            <div class="button-group">
-              <button type="button" data-taste="Sweet">Sweet</button>
-              <button type="button" data-taste="Savory">Savory</button>
-              <button type="button" data-taste="Both">Both</button>
+            <p><i class="fa-solid fa-cookie-bite question-icon"></i> Are you craving something sweet or savory?</p>
+            <div class="button-group" id="tasteOptions">
+              <button type="button" class="option-button" data-taste="Sweet"><i class="fa-solid fa-ice-cream"></i> Sweet</button>
+              <button type="button" class="option-button" data-taste="Savory"><i class="fa-solid fa-drumstick-bite"></i> Savory</button>
+              <button type="button" class="option-button" data-taste="Both"><i class="fa-solid fa-yin-yang"></i> Both</button>
             </div>
           </div>
+          
           <div class="survey-question">
-            <p>Any dietary preferences?</p>
-            <div class="button-group">
-              <button type="button" data-diet="None">No Preference</button>
-              <button type="button" data-diet="Vegetarian">Vegetarian</button>
-              <button type="button" data-diet="Vegan">Vegan</button>
-              <button type="button" data-diet="Gluten-Free">Gluten-Free</button>
+            <p><i class="fa-solid fa-carrot question-icon"></i> Any dietary preferences?</p>
+            <div class="button-group" id="dietOptions">
+              <button type="button" class="option-button" data-diet="None"><i class="fa-solid fa-circle-check"></i> No Preference</button>
+              <button type="button" class="option-button" data-diet="Vegetarian"><i class="fa-solid fa-seedling"></i> Vegetarian</button>
+              <button type="button" class="option-button" data-diet="Vegan"><i class="fa-solid fa-leaf"></i> Vegan</button>
+              <button type="button" class="option-button" data-diet="Gluten-Free"><i class="fa-solid fa-wheat-awn-circle-exclamation"></i> Gluten-Free</button>
             </div>
           </div>
-          <div style="text-align:center; margin-top:20px;">
-            <button type="submit" class="btn btn-primary" style="padding:15px 30px; font-size:1.1rem;">Submit Survey</button>
+          
+          <div class="results-preview" id="resultsPreview">
+            <h3><i class="fa-solid fa-clipboard-check"></i> Your Preferences</h3>
+            <div class="results-items" id="selectedPreferences">
+              <!-- Dynamically filled based on selections -->
+            </div>
+          </div>
+          
+          <div class="submit-container">
+            <button type="submit" class="submit-button" id="submitSurvey">
+              <i class="fa-solid fa-paper-plane"></i> Find My Perfect Meal
+            </button>
           </div>
         </form>
       </div>
@@ -541,7 +902,6 @@
       </div>
     </div>
   </footer>
-  
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // HELLO ANIMATION
