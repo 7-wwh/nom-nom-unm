@@ -638,29 +638,91 @@
     </div>
   </section>
   
-  <!-- Preferences Section -->
-  <section class="preferences" id="preferences">
-    <div class="container">
-      <div class="section-title">
-        <h2>Your Food Preferences</h2>
-        <p>Tell us what you like so we can serve you better</p>
-      </div>
-      <div class="preferences-form">
-        <form>
-          <div class="form-group">
-            <label>Favorite Cuisines</label>
-            <input type="text" placeholder="E.g. Italian, Chinese" />
-          </div>
-          <div class="form-group">
-            <label>Dietary Restrictions</label>
-            <input type="text" placeholder="E.g. Vegetarian, Gluten-Free" />
-          </div>
-          <button type="submit" class="btn btn-primary">Save Preferences</button>
-        </form>
-      </div>
+<!-- Preferences Section -->
+<section class="preferences" id="preferences" style="background: linear-gradient(rgba(255,107,107,0.05), rgba(255,107,107,0.1)); padding: 100px 0;">
+  <div class="container">
+    <div class="section-title">
+      <h2>Your Food Preferences</h2>
+      <p>Tell us what you love so we can serve you better</p>
     </div>
-  </section>
-  
+    <div class="preferences-form" style="background-color: white; padding: 40px; border-radius: 15px; box-shadow: var(--shadow-md); max-width: 800px; margin: 0 auto;">
+      <form>
+        <!-- Favorite Cuisines -->
+        <div class="form-group" style="margin-bottom: 25px;">
+          <label style="display:block; margin-bottom:10px; font-weight:500; color: var(--dark-color);">Favorite Cuisines</label>
+          <div class="checkbox-group" style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;">
+            <div class="checkbox-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="italian" name="cuisine" value="italian" style="width: auto;">
+              <label for="italian">Italian</label>
+            </div>
+            <div class="checkbox-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="chinese" name="cuisine" value="chinese" style="width: auto;">
+              <label for="chinese">Chinese</label>
+            </div>
+            <div class="checkbox-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="mexican" name="cuisine" value="mexican" style="width: auto;">
+              <label for="mexican">Mexican</label>
+            </div>
+            <div class="checkbox-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="indian" name="cuisine" value="indian" style="width: auto;">
+              <label for="indian">Indian</label>
+            </div>
+            <div class="checkbox-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="thai" name="cuisine" value="thai" style="width: auto;">
+              <label for="thai">Thai</label>
+            </div>
+          </div>
+        </div>
+        <!-- Dietary Preferences -->
+        <div class="form-group" style="margin-bottom: 25px;">
+          <label style="display:block; margin-bottom:10px; font-weight:500; color: var(--dark-color);">Dietary Preferences</label>
+          <div class="checkbox-group" style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;">
+            <div class="checkbox-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="vegetarian" name="diet" value="vegetarian" style="width: auto;">
+              <label for="vegetarian">Vegetarian</label>
+            </div>
+            <div class="checkbox-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="vegan" name="diet" value="vegan" style="width: auto;">
+              <label for="vegan">Vegan</label>
+            </div>
+            <div class="checkbox-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="glutenfree" name="diet" value="glutenfree" style="width: auto;">
+              <label for="glutenfree">Gluten-Free</label>
+            </div>
+            <div class="checkbox-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="dairyfree" name="diet" value="dairyfree" style="width: auto;">
+              <label for="dairyfree">Dairy-Free</label>
+            </div>
+          </div>
+        </div>
+        <!-- Spice Level -->
+        <div class="form-group" style="margin-bottom: 25px;">
+          <label style="display:block; margin-bottom:10px; font-weight:500; color: var(--dark-color);">Preferred Spice Level</label>
+          <div class="radio-group" style="display: flex; gap: 20px; align-items: center;">
+            <div class="radio-item" style="display: flex; align-items: center; gap: 5px;">
+              <input type="radio" id="mild" name="spice" value="mild" style="width:auto;">
+              <label for="mild">Mild</label>
+            </div>
+            <div class="radio-item" style="display: flex; align-items: center; gap: 5px;">
+              <input type="radio" id="medium" name="spice" value="medium" style="width:auto;">
+              <label for="medium">Medium</label>
+            </div>
+            <div class="radio-item" style="display: flex; align-items: center; gap: 5px;">
+              <input type="radio" id="spicy" name="spice" value="spicy" style="width:auto;">
+              <label for="spicy">Spicy</label>
+            </div>
+            <div class="radio-item" style="display: flex; align-items: center; gap: 5px;">
+              <input type="radio" id="veryspicy" name="spice" value="veryspicy" style="width:auto;">
+              <label for="veryspicy">Very Spicy</label>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Preferences</button>
+      </form>
+    </div>
+  </div>
+</section>
+
   <!-- Recommendations Section -->
   <section class="recommendations" id="recommendations">
     <div class="container">
