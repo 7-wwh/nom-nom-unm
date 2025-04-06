@@ -13,10 +13,10 @@
       --primary-color: #ff6b6b;
       --primary-dark: #e05050;
       --secondary-color: #ffd166;
+      --accent-color: #4ecdc4;
       --dark-color: #292f36;
       --light-color: #f7fff7;
-      --accent-color: #4ecdc4;
-      --shadow-md: 0 5px 15px rgba(0,0,0,0.1);
+      --bg-survey: #ffffff;
       --transition: all 0.3s ease;
     }
     
@@ -31,10 +31,11 @@
       background: var(--light-color);
       color: var(--dark-color);
       overflow-x: hidden;
+      line-height: 1.6;
     }
     
     .container {
-      max-width: 1200px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 0 20px;
     }
@@ -42,7 +43,7 @@
     /* Header & Navigation */
     header {
       background: rgba(255,255,255,0.98);
-      box-shadow: var(--shadow-md);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       position: fixed;
       width: 100%;
       top: 0;
@@ -64,7 +65,6 @@
       color: var(--primary-color);
       display: flex;
       align-items: center;
-      transition: var(--transition);
     }
     
     .logo span {
@@ -85,28 +85,12 @@
       text-decoration: none;
       color: var(--dark-color);
       font-weight: 500;
-      position: relative;
       padding: 8px 5px;
-      transition: var(--transition);
-    }
-    
-    .nav-links a:after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      bottom: 0;
-      left: 0;
-      background-color: var(--primary-color);
       transition: var(--transition);
     }
     
     .nav-links a:hover {
       color: var(--primary-color);
-    }
-    
-    .nav-links a:hover:after {
-      width: 100%;
     }
     
     .menu-toggle {
@@ -141,10 +125,6 @@
       align-items: center;
     }
     
-    .btn i {
-      margin-right: 8px;
-    }
-    
     .btn-primary {
       background-color: var(--primary-color);
       color: white;
@@ -153,7 +133,6 @@
     .btn-primary:hover {
       background-color: var(--primary-dark);
       transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
     }
     
     .btn-secondary {
@@ -166,7 +145,6 @@
       background-color: var(--primary-color);
       color: white;
       transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
     }
     
     /* Main Content Area */
@@ -175,61 +153,25 @@
       min-height: calc(100vh - 250px);
     }
     
-    /* Footer */
-    footer {
-      background-color: var(--dark-color);
-      color: white;
-      padding: 70px 0 20px;
-      position: relative;
-    }
-    
-    footer::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--accent-color));
-    }
-    
-    /* Overlays */
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--light-color);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 300;
-      flex-direction: column;
+    /* Loading Section */
+    #loading-section {
+      display: none;
       text-align: center;
       padding: 20px;
-    }
-    
-    /* Hello Overlay */
-    #hello-overlay h1 {
-      font-size: 4rem;
-      color: var(--primary-color);
-      opacity: 0;
-    }
-    
-    /* Loader Overlay */
-    #loading-overlay {
       background: linear-gradient(135deg, #f7fff7, #e0f7fa);
+      margin: 20px auto;
+      border-radius: 10px;
+      max-width: 400px;
     }
     
-    #loading-overlay .loader {
-      border: 8px solid #f3f3f3;
-      border-top: 8px solid var(--primary-color);
+    #loading-section .loader {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid var(--primary-color);
       border-radius: 50%;
-      width: 80px;
-      height: 80px;
+      width: 60px;
+      height: 60px;
       animation: spin 1s linear infinite;
-      margin-bottom: 20px;
+      margin: 0 auto 15px;
     }
     
     @keyframes spin {
@@ -237,66 +179,162 @@
       100% { transform: rotate(360deg); }
     }
     
-    #loading-overlay .loading-message {
-      font-size: 1.5rem;
+    #loadingMessage {
+      font-size: 1.2rem;
       color: var(--dark-color);
-      max-width: 90%;
     }
     
-    /* Survey Container */
-    #survey-container {
+    /* Survey Section */
+    #survey-section {
       display: none;
-      padding: 40px 20px;
-      background: #fff;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 600px;
-      box-shadow: var(--shadow-md);
+      background: var(--bg-survey);
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 500px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       border-radius: 10px;
-      z-index: 400;
     }
     
-    #survey-container h2 {
-      margin-bottom: 20px;
+    #survey-section h2 {
+      margin-bottom: 15px;
       color: var(--primary-color);
       text-align: center;
+      font-size: 1.8rem;
     }
     
     .survey-question {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
     
     .survey-question p {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
+      margin-bottom: 8px;
+      font-size: 1rem;
+      text-align: center;
     }
     
     .button-group {
       display: flex;
       flex-wrap: wrap;
+      justify-content: center;
       gap: 10px;
     }
     
+    /* Pill Shaped Buttons */
     .button-group button {
-      flex: 1;
-      padding: 15px;
-      font-size: 1rem;
+      padding: 10px 20px;
+      font-size: 0.95rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 50px;
       cursor: pointer;
-      background-color: var(--primary-color);
+      background-color: var(--accent-color);
       color: #fff;
       transition: var(--transition);
+      min-width: 100px;
     }
     
-    .button-group button:hover {
+    .button-group button.selected,
+    .button-group button:active {
       background-color: var(--primary-dark);
     }
     
-    /* Responsive adjustments */
+    /* Footer */
+    footer {
+      background-color: var(--dark-color);
+      color: #ddd;
+      padding: 40px 0 20px;
+      text-align: center;
+    }
+    
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      padding: 0 20px;
+    }
+    
+    .footer-column {
+      flex: 1 1 200px;
+      max-width: 250px;
+      text-align: left;
+    }
+    
+    .footer-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .footer-logo span {
+      color: var(--secondary-color);
+    }
+    
+    .footer-logo i {
+      margin-right: 8px;
+      font-size: 1.5rem;
+    }
+    
+    .footer-about {
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+    
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      font-size: 0.9rem;
+    }
+    
+    .footer-links li {
+      margin-bottom: 8px;
+    }
+    
+    .footer-links a {
+      color: #bbb;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary-color);
+    }
+    
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .social-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ddd;
+      transition: var(--transition);
+    }
+    
+    .social-icon:hover {
+      background-color: var(--primary-color);
+      color: #fff;
+    }
+    
+    .copyright {
+      margin-top: 15px;
+      font-size: 0.85rem;
+      border-top: 1px solid #444;
+      padding-top: 10px;
+    }
+    
+    /* Responsive */
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .menu-toggle { display: flex; }
@@ -304,22 +342,22 @@
   </style>
 </head>
 <body>
-  <!-- Hello Overlay -->
-  <div id="hello-overlay" class="overlay">
-    <h1 id="helloText" class="animate__animated">Hello!</h1>
-  </div>
+  <!-- Hello Section -->
+  <section id="hello-section" class="container" style="text-align:center; margin-top:100px;">
+    <h1 id="helloText" class="animate__animated" style="font-size:3.5rem; color: var(--primary-color); opacity:0;">Hello!</h1>
+  </section>
   
-  <!-- Loading Overlay -->
-  <div id="loading-overlay" class="overlay" style="display:none;">
+  <!-- Loading Section -->
+  <section id="loading-section">
     <div class="loader"></div>
-    <div id="loadingMessage" class="loading-message">Loading...</div>
-  </div>
+    <div id="loadingMessage">Loading...</div>
+  </section>
   
-  <!-- Survey Container -->
-  <div id="survey-container">
-    <h2>Food Preferences Survey</h2>
+  <!-- Survey Section -->
+  <section id="survey-section" class="container">
+    <h2>Food Survey</h2>
     <form id="surveyForm">
-      <!-- Spicy Level Question (Meal type based on local time) -->
+      <!-- Q1: Spice Level -->
       <div class="survey-question">
         <p id="spicyQuestion">How spicy do you want your meal?</p>
         <div class="button-group" id="spicyOptions">
@@ -330,9 +368,9 @@
           <button type="button" data-spice="Extra Hot">Extra Hot</button>
         </div>
       </div>
-      <!-- Cuisine Preference -->
+      <!-- Q2: Cuisine -->
       <div class="survey-question">
-        <p>Which cuisine are you in the mood for?</p>
+        <p>Which cuisine do you prefer?</p>
         <div class="button-group">
           <button type="button" data-cuisine="Local">Local</button>
           <button type="button" data-cuisine="Italian">Italian</button>
@@ -342,33 +380,51 @@
           <button type="button" data-cuisine="Fusion">Fusion</button>
         </div>
       </div>
-      <!-- Sweet vs Savory -->
+      <!-- Q3: Taste -->
       <div class="survey-question">
-        <p>Are you craving something sweet or savory?</p>
+        <p>Sweet or savory?</p>
         <div class="button-group">
           <button type="button" data-taste="Sweet">Sweet</button>
           <button type="button" data-taste="Savory">Savory</button>
           <button type="button" data-taste="Both">Both</button>
         </div>
       </div>
-      <!-- Dietary Preferences -->
+      <!-- Q4: Dietary -->
       <div class="survey-question">
-        <p>Any dietary preferences?</p>
+        <p>Dietary preference?</p>
         <div class="button-group">
-          <button type="button" data-diet="None">No Preference</button>
+          <button type="button" data-diet="None">None</button>
           <button type="button" data-diet="Vegetarian">Vegetarian</button>
           <button type="button" data-diet="Vegan">Vegan</button>
           <button type="button" data-diet="Gluten-Free">Gluten-Free</button>
         </div>
       </div>
+      <!-- Q5: Price Range -->
+      <div class="survey-question">
+        <p>Price range?</p>
+        <div class="button-group">
+          <button type="button" data-price="Budget">Budget</button>
+          <button type="button" data-price="Mid-range">Mid-range</button>
+          <button type="button" data-price="Splurge">Splurge</button>
+        </div>
+      </div>
+      <!-- Q6: Dining Experience -->
+      <div class="survey-question">
+        <p>Dining style?</p>
+        <div class="button-group">
+          <button type="button" data-dining="Casual">Casual</button>
+          <button type="button" data-dining="Formal">Formal</button>
+          <button type="button" data-dining="Family-style">Family-style</button>
+        </div>
+      </div>
       <!-- Submit Button -->
       <div style="text-align:center; margin-top:20px;">
-        <button type="submit" class="btn btn-primary" style="padding:15px 30px; font-size:1.1rem;">Submit Survey</button>
+        <button type="submit" class="btn btn-primary" style="padding:12px 30px; font-size:1rem;">Submit</button>
       </div>
     </form>
-  </div>
+  </section>
   
-  <!-- Header & Navigation (remains visible behind overlays) -->
+  <!-- Header & Navigation -->
   <header>
     <div class="container">
       <nav>
@@ -395,11 +451,11 @@
     </div>
   </header>
   
-  <!-- Main Content Area -->
+  <!-- Main Content -->
   <main>
     <div class="container">
-      <h2 style="text-align:center; margin-bottom:20px;">Page Title</h2>
-      <p style="text-align:center;">This is an empty page. Add your content here.</p>
+      <h2 style="text-align:center; margin-bottom:20px;">Welcome to NomNom</h2>
+      <p style="text-align:center;">Discover personalized food recommendations based on your cravings!</p>
     </div>
   </main>
   
@@ -411,7 +467,9 @@
           <div class="footer-logo">
             <i class="fa-solid fa-burger"></i> Nom<span>Nom</span>
           </div>
-          <p class="footer-about">NomNom is your personal food discovery platform that uses AI to serve you the best local dishes based on your tastes.</p>
+          <p class="footer-about">
+            NomNom uses AI to serve the best local dishes tailored to your taste.
+          </p>
           <div class="social-links">
             <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
@@ -419,29 +477,28 @@
           </div>
         </div>
         <div class="footer-column">
-          <h3>About NomNom</h3>
+          <h3>About</h3>
           <ul class="footer-links">
             <li><a href="#">Our Story</a></li>
             <li><a href="#">How It Works</a></li>
-            <li><a href="#">Meet the Team</a></li>
+            <li><a href="#">Team</a></li>
             <li><a href="#">Careers</a></li>
           </ul>
         </div>
         <div class="footer-column">
-          <h3>For Users</h3>
+          <h3>Help</h3>
           <ul class="footer-links">
-            <li><a href="#">Create Account</a></li>
-            <li><a href="#">User Guide</a></li>
+            <li><a href="#">Account</a></li>
             <li><a href="#">FAQs</a></li>
-            <li><a href="#">Contact Support</a></li>
+            <li><a href="#">Support</a></li>
           </ul>
         </div>
         <div class="footer-column">
           <h3>Legal</h3>
           <ul class="footer-links">
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Cookies</a></li>
           </ul>
         </div>
       </div>
@@ -459,31 +516,29 @@
       helloText.classList.add("animate__bounceIn");
       helloText.style.opacity = 1;
       
-      // After 3 seconds, transition out the hello overlay and start loading sequence
+      // After 2.5 seconds, hide hello and start loading
       setTimeout(() => {
         helloText.classList.remove("animate__bounceIn");
         helloText.classList.add("animate__fadeOutUp");
         setTimeout(() => {
-          const helloOverlay = document.getElementById("hello-overlay");
-          helloOverlay.style.display = "none";
+          document.getElementById("hello-section").style.display = "none";
           startLoadingSequence();
-        }, 800);
-      }, 3000);
+        }, 700);
+      }, 2500);
       
-      // LOADING SEQUENCE with messages
+      // Loading sequence with shorter messages
       function startLoadingSequence() {
-        const loadingOverlay = document.getElementById("loading-overlay");
+        const loadingSection = document.getElementById("loading-section");
         const loadingMessage = document.getElementById("loadingMessage");
-        loadingOverlay.style.display = "flex";
+        loadingSection.style.display = "block";
         const messages = [
-          "Learning your past cravings...",
-          "Past cravings found: You like sweet food recently...",
-          "Recent search results show you like Malaysian local cuisine...",
-          "What do you currently feel like having?"
+          "Learning your cravings...",
+          "Found: Sweet treats...",
+          "Malaysian local cuisine trending...",
+          "What's your mood today?"
         ];
         let msgIndex = 0;
         loadingMessage.textContent = messages[msgIndex];
-        // Change message every 2.5 seconds
         const msgInterval = setInterval(() => {
           msgIndex++;
           if (msgIndex < messages.length) {
@@ -493,16 +548,15 @@
               loadingMessage.classList.remove("animate__fadeOut");
               loadingMessage.classList.add("animate__fadeIn");
               loadingMessage.textContent = messages[msgIndex];
-            }, 500);
+            }, 400);
           } else {
             clearInterval(msgInterval);
-            // End loading after a brief pause
             setTimeout(() => {
-              loadingOverlay.style.display = "none";
+              loadingSection.style.display = "none";
               showSurvey();
-            }, 1000);
+            }, 800);
           }
-        }, 2500);
+        }, 1500);
       }
       
       // Determine meal type based on local time
@@ -513,33 +567,28 @@
         else return "dinner";
       }
       
-      // SHOW SURVEY: update survey question based on meal type and display the container
+      // Show survey and update question
       function showSurvey() {
         const mealType = getMealType();
         const spicyQuestion = document.getElementById("spicyQuestion");
-        spicyQuestion.textContent = `How spicy do you want your ${mealType}?`;
-        document.getElementById("survey-container").style.display = "block";
+        spicyQuestion.textContent = `Spice level for your ${mealType}?`;
+        document.getElementById("survey-section").style.display = "block";
       }
       
-      // Example: survey button click handlers (expand this as needed)
-      const surveyButtons = document.querySelectorAll("#survey-container .button-group button");
+      // Button selection handler
+      const surveyButtons = document.querySelectorAll("#survey-section .button-group button");
       surveyButtons.forEach(button => {
         button.addEventListener("click", function() {
-          // For demonstration, mark the button as selected
-          this.style.backgroundColor = varValue("--primary-dark");
+          const siblings = this.parentElement.querySelectorAll("button");
+          siblings.forEach(btn => btn.classList.remove("selected"));
+          this.classList.add("selected");
         });
       });
       
-      // Helper function to get CSS variable value
-      function varValue(variable) {
-        return getComputedStyle(document.documentElement).getPropertyValue(variable);
-      }
-      
-      // Optional: Handle form submission
+      // Form submission redirects to results.html
       document.getElementById("surveyForm").addEventListener("submit", function(e) {
         e.preventDefault();
-        alert("Survey submitted! Thank you for your feedback.");
-        // Here you can process survey data as needed.
+        window.location.href = "results.html";
       });
     });
   </script>
