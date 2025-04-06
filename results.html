@@ -222,8 +222,8 @@
     <div class="container">
       <div class="preferences">
         <h2>Your Personalized Restaurant Recommendations</h2>
-        <p>Looks like you've chosen the following preferences: <strong>[Preferences A, B, C, D]</strong></p>
-        <p>Here are some restaurants we think you'll love!</p>
+        <p>Looks like you've chosen the following preferences:</p>
+        <p id="preferences-display">Loading preferences...</p>
       </div>
 
       <div class="recommendations">
@@ -311,5 +311,18 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const cuisine = urlParams.get('cuisine');
+    const taste = urlParams.get('taste');
+    const diet = urlParams.get('diet');
+    const spice = urlParams.get('spice');
+
+    // Display the preferences in the HTML
+    const preferencesDisplay = document.getElementById('preferences-display');
+    preferencesDisplay.innerHTML = `Cuisine: ${cuisine || 'Not selected'}, Taste: ${taste || 'Not selected'}, Diet: ${diet || 'Not selected'}, Spice: ${spice || 'Not selected'}`;
+  </script>
 </body>
 </html>
