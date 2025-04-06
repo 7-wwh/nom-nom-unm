@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NomNom - Your Personalized Recommendations</title>
-  <!-- Font Awesome & Animate.css -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <style>
@@ -60,6 +59,10 @@
       color: var(--primary-color);
       display: flex;
       align-items: center;
+    }
+    .logo span {
+      color: #ffd166; /* Yellow color for 'Nom' */
+      font-weight: bold;
     }
     .logo i {
       margin-right: 8px;
@@ -199,7 +202,7 @@
     <div class="container">
       <nav>
         <div class="logo">
-          <i class="fa-solid fa-burger"></i> Nom<span>Nom</span>
+          <i class="fa-solid fa-burger"></i> <span>Nom</span>Nom
         </div>
         <div class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
           <span></span>
@@ -270,7 +273,7 @@
       <div class="footer-content">
         <div class="footer-column">
           <div class="footer-logo">
-            <i class="fa-solid fa-burger"></i> Nom<span>Nom</span>
+            <i class="fa-solid fa-burger"></i> <span>Nom</span>Nom
           </div>
           <p class="footer-about">NomNom is your personal food discovery platform that uses AI to serve you the best local dishes based on your tastes.</p>
           <div class="social-links">
