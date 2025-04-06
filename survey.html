@@ -1,10 +1,9 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NomNom - Food Survey</title>
-  <!-- External Libraries -->
+  <title>NomNom - Personalized Food Survey</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" />
@@ -13,11 +12,10 @@
       --primary-color: #ff6b6b;
       --primary-dark: #e05050;
       --secondary-color: #ffd166;
-      --accent-color: #4ecdc4;
       --dark-color: #292f36;
       --light-color: #f7fff7;
-      --bg-survey: #ffffff;
-      --header-height: 70px;
+      --accent-color: #4ecdc4;
+      --shadow-md: 0 5px 15px rgba(0,0,0,0.1);
       --transition: all 0.3s ease;
     }
     
@@ -31,40 +29,42 @@
     body {
       background: var(--light-color);
       color: var(--dark-color);
+      overflow-x: hidden;
       line-height: 1.6;
     }
     
-    /* Header */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Header & Navigation */
     header {
       background: rgba(255,255,255,0.98);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-md);
       position: fixed;
       width: 100%;
       top: 0;
       left: 0;
       z-index: 100;
-      height: var(--header-height);
-    }
-    
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 20px;
+      transition: var(--transition);
     }
     
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 100%;
+      padding: 15px 0;
     }
     
     .logo {
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: 700;
       color: var(--primary-color);
       display: flex;
       align-items: center;
+      transition: var(--transition);
     }
     
     .logo span {
@@ -73,19 +73,31 @@
     
     .logo i {
       margin-right: 8px;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
     }
     
     .nav-links {
       display: flex;
-      gap: 20px;
+      gap: 25px;
     }
     
     .nav-links a {
       text-decoration: none;
       color: var(--dark-color);
       font-weight: 500;
-      padding: 5px;
+      position: relative;
+      padding: 8px 5px;
+      transition: var(--transition);
+    }
+    
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--primary-color);
       transition: var(--transition);
     }
     
@@ -93,13 +105,32 @@
       color: var(--primary-color);
     }
     
+    .nav-links a:hover:after {
+      width: 100%;
+    }
+    
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+    
+    .menu-toggle span {
+      height: 3px;
+      width: 30px;
+      background-color: var(--primary-color);
+      border-radius: 3px;
+      transition: var(--transition);
+    }
+    
     .auth-buttons {
       display: flex;
-      gap: 10px;
+      gap: 15px;
     }
     
     .btn {
-      padding: 8px 16px;
+      padding: 10px 20px;
       border: none;
       border-radius: 30px;
       cursor: pointer;
@@ -110,151 +141,83 @@
       align-items: center;
     }
     
+    .btn i {
+      margin-right: 8px;
+    }
+    
     .btn-primary {
       background-color: var(--primary-color);
-      color: #fff;
+      color: white;
     }
     
     .btn-primary:hover {
       background-color: var(--primary-dark);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
     }
     
     .btn-secondary {
-      background-color: #fff;
+      background-color: white;
       color: var(--primary-color);
       border: 1px solid var(--primary-color);
     }
     
     .btn-secondary:hover {
       background-color: var(--primary-color);
-      color: #fff;
-      transform: translateY(-2px);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
     }
     
-    /* Main Content */
+    /* Main Content Area */
     main {
-      padding-top: calc(var(--header-height) + 30px);
-      padding-bottom: 50px;
-    }
-    
-    /* Loading Overlay */
-    #loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(247, 255, 247, 0.95);
+      padding: 150px 0 100px;
+      min-height: calc(100vh - 250px);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 200;
-    }
-    
-    #loading-overlay .loader {
-      border: 6px solid #f3f3f3;
-      border-top: 6px solid var(--primary-color);
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
-      margin-bottom: 15px;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    #loadingMessage {
-      font-size: 1.2rem;
-      color: var(--dark-color);
-    }
-    
-    /* Survey Section */
-    #survey-section {
-      display: none;
-      background: var(--bg-survey);
-      margin: 20px auto;
-      padding: 20px;
-      max-width: 500px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      border-radius: 10px;
-    }
-    
-    #survey-section h2 {
-      margin-bottom: 15px;
-      color: var(--primary-color);
-      text-align: center;
-      font-size: 1.8rem;
-    }
-    
-    .survey-question {
-      margin-bottom: 15px;
-    }
-    
-    .survey-question p {
-      margin-bottom: 8px;
-      font-size: 1rem;
-      text-align: center;
-    }
-    
-    .button-group {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-    
-    /* Pill-Shaped Buttons */
-    .button-group button {
-      padding: 10px 20px;
-      font-size: 0.95rem;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      background-color: var(--accent-color);
-      color: #fff;
-      transition: var(--transition);
-      min-width: 100px;
-    }
-    
-    .button-group button.selected,
-    .button-group button:active {
-      background-color: var(--primary-dark);
+      align-items: center; /* Center content horizontally */
     }
     
     /* Footer */
     footer {
       background-color: var(--dark-color);
       color: #ddd;
-      padding: 40px 20px;
-      text-align: center;
+      padding: 60px 0 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--accent-color));
     }
     
     .footer-content {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
+      justify-content: space-between;
       gap: 30px;
-      margin-bottom: 20px;
+      padding: 0 20px;
     }
     
     .footer-column {
-      flex: 1 1 200px;
-      max-width: 250px;
-      text-align: left;
+      flex: 1 1 220px;
+      min-width: 200px;
     }
     
     .footer-logo {
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: 700;
       color: var(--primary-color);
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       display: flex;
       align-items: center;
+      transition: var(--transition);
     }
     
     .footer-logo span {
@@ -263,28 +226,28 @@
     
     .footer-logo i {
       margin-right: 8px;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
     }
     
     .footer-about {
-      font-size: 0.9rem;
-      margin-bottom: 15px;
-      line-height: 1.4;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
     
     .footer-links {
       list-style: none;
-      padding: 0;
-      font-size: 0.9rem;
+      padding-left: 0;
     }
     
     .footer-links li {
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     
     .footer-links a {
       color: #bbb;
       text-decoration: none;
+      font-size: 0.95rem;
       transition: var(--transition);
     }
     
@@ -294,19 +257,18 @@
     
     .social-links {
       display: flex;
-      justify-content: center;
       gap: 10px;
       margin-top: 10px;
     }
     
     .social-icon {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      background-color: rgba(255,255,255,0.1);
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,0.1);
       color: #ddd;
       transition: var(--transition);
     }
@@ -317,13 +279,124 @@
     }
     
     .copyright {
-      font-size: 0.85rem;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9rem;
       border-top: 1px solid #444;
-      padding-top: 10px;
-      margin-top: 15px;
+      padding-top: 15px;
     }
     
-    /* Responsive */
+    /* Footer Animation on Scroll */
+    .footer-animate {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    
+    .footer-animate.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Overlays */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--light-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    /* Hello Overlay */
+    #hello-overlay h1 {
+      font-size: 4rem;
+      color: var(--primary-color);
+      opacity: 0;
+    }
+    
+    /* Loader Overlay */
+    #loading-overlay {
+      background: linear-gradient(135deg, #f7fff7, #e0f7fa);
+    }
+    
+    #loading-overlay .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid var(--primary-color);
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    #loading-overlay .loading-message {
+      font-size: 1.5rem;
+      color: var(--dark-color);
+      max-width: 90%;
+    }
+    
+    /* Survey Container */
+    #survey-container {
+      padding: 40px 20px;
+      background: #fff;
+      box-shadow: var(--shadow-md);
+      border-radius: 10px;
+      margin-top: 20px; /* Add margin to separate from main content */
+      width: 90%;
+      max-width: 600px;
+    }
+    
+    #survey-container h2 {
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      text-align: center;
+    }
+    
+    .survey-question {
+      margin-bottom: 20px;
+    }
+    
+    .survey-question p {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+    
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .button-group button {
+      flex: 1;
+      padding: 15px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: var(--primary-color);
+      color: #fff;
+      transition: var(--transition);
+    }
+    
+    .button-group button:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    /* Responsive adjustments */
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .menu-toggle { display: flex; }
@@ -331,16 +404,31 @@
   </style>
 </head>
 <body>
-  <!-- Header -->
+  <div id="hello-overlay" class="overlay">
+    <h1 id="helloText" class="animate__animated">Hello!</h1>
+  </div>
+  
+  <div id="loading-overlay" class="overlay" style="display:none;">
+    <div class="loader"></div>
+    <div id="loadingMessage" class="loading-message">Loading...</div>
+  </div>
+  
   <header>
     <div class="container">
       <nav>
         <div class="logo">
           <i class="fa-solid fa-burger"></i> Nom<span>Nom</span>
         </div>
+        <div class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
         <div class="nav-links">
           <a href="index.html">Home</a>
-          <a href="#survey-section">Survey</a>
+          <a href="#preferences">My Preferences</a>
+          <a href="#recommendations">Recommendations</a>
+          <a href="#howitworks">How It Works</a>
           <a href="#contact">Contact</a>
         </div>
         <div class="auth-buttons">
@@ -351,25 +439,16 @@
     </div>
   </header>
   
-  <!-- Loading Overlay (Modal) -->
-  <div id="loading-overlay">
-    <div class="loader"></div>
-    <div id="loadingMessage">Loading...</div>
-  </div>
-  
-  <!-- Main Content -->
   <main>
     <div class="container">
-      <h2 style="text-align:center; margin-bottom:20px;">Welcome to NomNom</h2>
-      <p style="text-align:center;">Discover personalized food recommendations based on your cravings!</p>
+      <h2 style="text-align:center; margin-bottom:20px;">Page Title</h2>
+      <p style="text-align:center;">This is an empty page. Add your content here.</p>
       
-      <!-- Survey Section (Integrated) -->
-      <section id="survey-section">
-        <h2>Food Survey</h2>
+      <div id="survey-container">
+        <h2>Food Preferences Survey</h2>
         <form id="surveyForm">
-          <!-- Q1: Spice Level -->
           <div class="survey-question">
-            <p id="spicyQuestion">Spice level for your meal?</p>
+            <p id="spicyQuestion">How spicy do you want your meal?</p>
             <div class="button-group" id="spicyOptions">
               <button type="button" data-spice="Not Spicy">Not Spicy</button>
               <button type="button" data-spice="Mild">Mild</button>
@@ -378,9 +457,8 @@
               <button type="button" data-spice="Extra Hot">Extra Hot</button>
             </div>
           </div>
-          <!-- Q2: Cuisine -->
           <div class="survey-question">
-            <p>Preferred cuisine?</p>
+            <p>Which cuisine are you in the mood for?</p>
             <div class="button-group">
               <button type="button" data-cuisine="Local">Local</button>
               <button type="button" data-cuisine="Italian">Italian</button>
@@ -390,54 +468,32 @@
               <button type="button" data-cuisine="Fusion">Fusion</button>
             </div>
           </div>
-          <!-- Q3: Taste -->
           <div class="survey-question">
-            <p>Sweet or savory?</p>
+            <p>Are you craving something sweet or savory?</p>
             <div class="button-group">
               <button type="button" data-taste="Sweet">Sweet</button>
               <button type="button" data-taste="Savory">Savory</button>
               <button type="button" data-taste="Both">Both</button>
             </div>
           </div>
-          <!-- Q4: Dietary -->
           <div class="survey-question">
-            <p>Dietary preference?</p>
+            <p>Any dietary preferences?</p>
             <div class="button-group">
-              <button type="button" data-diet="None">None</button>
+              <button type="button" data-diet="None">No Preference</button>
               <button type="button" data-diet="Vegetarian">Vegetarian</button>
               <button type="button" data-diet="Vegan">Vegan</button>
               <button type="button" data-diet="Gluten-Free">Gluten-Free</button>
             </div>
           </div>
-          <!-- Q5: Price Range -->
-          <div class="survey-question">
-            <p>Price range?</p>
-            <div class="button-group">
-              <button type="button" data-price="Budget">Budget</button>
-              <button type="button" data-price="Mid-range">Mid-range</button>
-              <button type="button" data-price="Splurge">Splurge</button>
-            </div>
-          </div>
-          <!-- Q6: Dining Style -->
-          <div class="survey-question">
-            <p>Dining style?</p>
-            <div class="button-group">
-              <button type="button" data-dining="Casual">Casual</button>
-              <button type="button" data-dining="Formal">Formal</button>
-              <button type="button" data-dining="Family">Family</button>
-            </div>
-          </div>
-          <!-- Submit Button -->
           <div style="text-align:center; margin-top:20px;">
-            <button type="submit" class="btn btn-primary" style="padding:12px 30px; font-size:1rem;">Submit</button>
+            <button type="submit" class="btn btn-primary" style="padding:15px 30px; font-size:1.1rem;">Submit Survey</button>
           </div>
         </form>
-      </section>
+      </div>
     </div>
   </main>
   
-  <!-- Footer -->
-  <footer id="contact">
+  <footer id="contact" class="footer-animate">
     <div class="container">
       <div class="footer-content">
         <div class="footer-column">
@@ -445,7 +501,7 @@
             <i class="fa-solid fa-burger"></i> Nom<span>Nom</span>
           </div>
           <p class="footer-about">
-            NomNom uses AI to serve the best local dishes tailored to your taste.
+            NomNom is your personal food discovery platform that uses AI to serve you the best local dishes based on your tastes.
           </p>
           <div class="social-links">
             <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
@@ -454,28 +510,29 @@
           </div>
         </div>
         <div class="footer-column">
-          <h3>About</h3>
+          <h3>About NomNom</h3>
           <ul class="footer-links">
             <li><a href="#">Our Story</a></li>
             <li><a href="#">How It Works</a></li>
-            <li><a href="#">Team</a></li>
+            <li><a href="#">Meet the Team</a></li>
             <li><a href="#">Careers</a></li>
           </ul>
         </div>
         <div class="footer-column">
-          <h3>Help</h3>
+          <h3>For Users</h3>
           <ul class="footer-links">
-            <li><a href="#">Account</a></li>
+            <li><a href="#">Create Account</a></li>
+            <li><a href="#">User Guide</a></li>
             <li><a href="#">FAQs</a></li>
-            <li><a href="#">Support</a></li>
+            <li><a href="#">Contact Support</a></li>
           </ul>
         </div>
         <div class="footer-column">
           <h3>Legal</h3>
           <ul class="footer-links">
-            <li><a href="#">Terms</a></li>
-            <li><a href="#">Privacy</a></li>
-            <li><a href="#">Cookies</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
           </ul>
         </div>
       </div>
@@ -485,7 +542,6 @@
     </div>
   </footer>
   
-  <!-- JavaScript for Loading & Survey -->
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // HELLO ANIMATION
@@ -493,29 +549,31 @@
       helloText.classList.add("animate__bounceIn");
       helloText.style.opacity = 1;
       
-      // After 2.5s, fade out hello and start loading overlay
+      // After 3 seconds, transition out the hello overlay and start loading sequence
       setTimeout(() => {
         helloText.classList.remove("animate__bounceIn");
         helloText.classList.add("animate__fadeOutUp");
         setTimeout(() => {
-          document.getElementById("hello-section").style.display = "none";
+          const helloOverlay = document.getElementById("hello-overlay");
+          helloOverlay.style.display = "none";
           startLoadingSequence();
-        }, 700);
-      }, 2500);
+        }, 800);
+      }, 3000);
       
-      // Loading sequence
+      // LOADING SEQUENCE with messages
       function startLoadingSequence() {
         const loadingOverlay = document.getElementById("loading-overlay");
         const loadingMessage = document.getElementById("loadingMessage");
         loadingOverlay.style.display = "flex";
         const messages = [
-          "Learning your cravings...",
-          "Found: Sweet treats...",
-          "Malaysian local cuisine trending...",
-          "What's your mood today?"
+          "Learning your past cravings...",
+          "Past cravings found: You like sweet food recently...",
+          "Recent search results show you like Malaysian local cuisine...",
+          "What do you currently feel like having?"
         ];
         let msgIndex = 0;
         loadingMessage.textContent = messages[msgIndex];
+        // Change message every 2.5 seconds
         const msgInterval = setInterval(() => {
           msgIndex++;
           if (msgIndex < messages.length) {
@@ -525,18 +583,18 @@
               loadingMessage.classList.remove("animate__fadeOut");
               loadingMessage.classList.add("animate__fadeIn");
               loadingMessage.textContent = messages[msgIndex];
-            }, 400);
+            }, 500);
           } else {
             clearInterval(msgInterval);
+            // End loading after a brief pause
             setTimeout(() => {
               loadingOverlay.style.display = "none";
-              showSurvey();
-            }, 800);
+            }, 1000);
           }
-        }, 1500);
+        }, 2500);
       }
       
-      // Determine meal type based on time for spice question
+      // Determine meal type based on local time
       function getMealType() {
         const hour = new Date().getHours();
         if (hour < 11) return "brunch";
@@ -544,28 +602,45 @@
         else return "dinner";
       }
       
-      // Show survey section and update spice question text
-      function showSurvey() {
+      // SHOW SURVEY: update survey question based on meal type
+      window.onload = function() {
         const mealType = getMealType();
-        document.getElementById("spicyQuestion").textContent = `Spice level for your ${mealType}?`;
-        document.getElementById("survey-section").style.display = "block";
+        const spicyQuestion = document.getElementById("spicyQuestion");
+        spicyQuestion.textContent = `How spicy do you want your ${mealType}?`;
       }
       
-      // Button selection behavior
-      const surveyButtons = document.querySelectorAll("#survey-section .button-group button");
+      // Example: survey button click handlers (expand as needed)
+      const surveyButtons = document.querySelectorAll("#survey-container .button-group button");
       surveyButtons.forEach(button => {
         button.addEventListener("click", function() {
-          const siblings = this.parentElement.querySelectorAll("button");
-          siblings.forEach(btn => btn.classList.remove("selected"));
-          this.classList.add("selected");
+          // For demonstration, mark the button as selected
+          this.style.backgroundColor = varValue("--primary-dark");
         });
       });
       
-      // On survey submit, redirect to results.html
+      // Helper function to get CSS variable value
+      function varValue(variable) {
+        return getComputedStyle(document.documentElement).getPropertyValue(variable);
+      }
+      
+      // Optional: Handle form submission
       document.getElementById("surveyForm").addEventListener("submit", function(e) {
         e.preventDefault();
-        window.location.href = "results.html";
+        alert("Survey submitted! Thank you for your feedback.");
+        // Process survey data as needed.
       });
+      
+      // Footer animation on scroll
+      const footer = document.querySelector("footer");
+      function checkFooterVisibility() {
+        const footerRect = footer.getBoundingClientRect();
+        if (footerRect.top < window.innerHeight) {
+          footer.classList.add("visible");
+          window.removeEventListener("scroll", checkFooterVisibility);
+        }
+      }
+      window.addEventListener("scroll", checkFooterVisibility);
+      checkFooterVisibility();
     });
   </script>
 </body>
