@@ -39,7 +39,7 @@
       background-color: var(--light-color);
       color: var(--dark-color);
       line-height: 1.6;
-      overflow-x: hidden;
+      overflow-x: hidden; /* Prevent horizontal scroll */
     }
 
     body.no-scroll {
@@ -63,14 +63,14 @@
       color: var(--primary-dark);
       position: relative;
       padding-bottom: 10px;
+      display: inline-block; /* Ensure underline fits content */
     }
 
     h3::after {
       content: '';
       position: absolute;
       bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 0; /* Align underline to the left */
       width: 80px;
       height: 3px;
       background: var(--secondary-color);
@@ -97,7 +97,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 15px 0;
-      position: relative;
+      position: relative; /* Needed for absolute positioning of nav-links on mobile */
     }
 
     .logo, .footer-logo {
@@ -121,6 +121,7 @@
     .nav-links {
       display: flex;
       gap: 25px;
+      list-style: none; /* Remove default list styles */
     }
 
     .nav-links a {
@@ -152,24 +153,26 @@
     }
 
     .menu-toggle {
-      display: none;
+      display: none; /* Hidden by default */
       flex-direction: column;
       justify-content: space-between;
       width: 30px;
       height: 21px;
       cursor: pointer;
+      z-index: 110; /* Ensure it's above nav links */
     }
 
     .menu-toggle span {
       height: 3px;
       width: 100%;
       background-color: var(--dark-color);
+      border-radius: 1px;
       transition: var(--transition);
     }
 
     /* --- Content --- */
     main {
-      padding-top: 80px;
+      padding-top: 80px; /* Adjust based on header height */
       padding-bottom: 60px;
     }
 
@@ -223,33 +226,42 @@
       border-radius: 20px;
       margin: 15px 0;
       overflow: hidden;
+      height: 10px; /* Explicit height */
     }
 
     .loading-bar {
-      height: 10px;
+      height: 100%; /* Fill parent height */
       background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
       width: 0%;
       border-radius: 20px;
       transition: width 2s ease;
     }
 
-    .loading-steps {
+    .loading-steps-container {
+        margin-top: 15px;
+    }
+
+    .loading-progress-text {
       display: flex;
       justify-content: space-between;
-      margin-top: 10px;
       font-size: 0.8rem;
       color: var(--gray-color);
+      margin-bottom: 10px;
     }
 
     .loading-step {
       display: flex;
       align-items: center;
       margin-top: 8px;
+      font-size: 0.9rem;
+      color: var(--dark-color);
     }
 
     .step-icon {
       margin-right: 10px;
       color: var(--primary-color);
+      width: 20px; /* Align icons */
+      text-align: center;
     }
 
     .step-text {
@@ -286,17 +298,20 @@
       border-radius: 50%;
       overflow: hidden;
       border: 4px solid var(--primary-color);
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-sm); /* Softer shadow */
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
     .profile-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block; /* Remove potential bottom space */
     }
 
     .profile-info {
       flex: 1;
+      min-width: 200px; /* Prevent excessive shrinking */
     }
 
     .profile-info h2 {
@@ -304,9 +319,15 @@
       font-size: 2rem;
     }
 
+    .profile-info p {
+        color: var(--gray-color);
+        font-size: 0.95rem;
+    }
+
     .profile-stats {
       display: flex;
-      gap: 20px;
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
+      gap: 15px; /* Slightly reduced gap */
       margin-top: 15px;
     }
 
@@ -315,26 +336,35 @@
       flex-direction: column;
       align-items: center;
       background-color: var(--gray-light);
-      padding: 10px 20px;
+      padding: 10px 15px; /* Adjusted padding */
       border-radius: 8px;
-      min-width: 100px;
+      min-width: 90px; /* Adjusted min-width */
+      text-align: center;
       transition: var(--transition);
     }
 
     .stat-item:hover {
-      transform: translateY(-5px);
+      transform: translateY(-3px); /* Softer hover effect */
       box-shadow: var(--shadow-sm);
     }
 
     .stat-number {
-      font-size: 1.5rem;
+      font-size: 1.4rem; /* Slightly smaller */
       font-weight: 700;
       color: var(--primary-color);
     }
 
     .stat-label {
-      font-size: 0.9rem;
+      font-size: 0.85rem; /* Slightly smaller */
       color: var(--gray-color);
+    }
+
+    .taste-profile-content {
+        margin-top: 20px;
+    }
+    .taste-profile-content p {
+        color: var(--dark-color);
+        font-size: 1rem;
     }
 
     /* --- Past Cravings Section --- */
@@ -342,8 +372,19 @@
       text-align: center;
       margin-bottom: 30px;
     }
+    .section-title h3 {
+        display: inline-block; /* Center underline */
+    }
+    .section-title h3::after {
+        left: 50%; /* Center underline */
+        transform: translateX(-50%);
+    }
+    .section-title p {
+        color: var(--gray-color);
+        margin-top: 5px;
+    }
 
-    .past-cravings {
+    .past-cravings, .recommendations {
       background-color: var(--white);
       border-radius: 12px;
       box-shadow: var(--shadow-md);
@@ -362,25 +403,28 @@
     .filter-btn {
       padding: 8px 16px;
       background-color: var(--gray-light);
-      border: none;
+      border: 1px solid transparent; /* Add border for consistency */
       border-radius: 20px;
       cursor: pointer;
       font-weight: 500;
       transition: var(--transition);
+      color: var(--dark-color);
     }
 
     .filter-btn:hover {
       background-color: var(--secondary-color);
-      color: var(--dark-color);
+      border-color: var(--secondary-color);
     }
 
     .filter-btn.active {
       background-color: var(--primary-color);
       color: white;
+      border-color: var(--primary-color);
     }
 
     .cravings-grid {
       display: grid;
+      /* Responsive grid: more columns on larger screens */
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 25px;
     }
@@ -391,6 +435,9 @@
       box-shadow: var(--shadow-sm);
       transition: var(--transition);
       position: relative;
+      background-color: var(--white); /* Ensure background for content */
+      display: flex; /* Use flexbox for better structure */
+      flex-direction: column;
     }
 
     .craving-card:hover {
@@ -409,10 +456,11 @@
       height: 100%;
       object-fit: cover;
       transition: transform 0.5s ease;
+      display: block; /* Remove potential bottom space */
     }
 
     .craving-card:hover .craving-img img {
-      transform: scale(1.1);
+      transform: scale(1.08); /* Slightly adjusted scale */
     }
 
     .craving-date {
@@ -425,11 +473,14 @@
       font-size: 0.8rem;
       font-weight: 500;
       color: var(--dark-color);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     .craving-content {
       padding: 15px;
-      background-color: var(--white);
+      flex-grow: 1; /* Allow content to fill remaining space */
+      display: flex;
+      flex-direction: column;
     }
 
     .craving-title {
@@ -439,17 +490,25 @@
       color: var(--dark-color);
     }
 
+    .craving-description { /* Added class for description */
+        font-size: 0.9rem;
+        color: var(--gray-color);
+        margin-bottom: 10px;
+        flex-grow: 1; /* Push details to bottom */
+    }
+
     .craving-details {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 10px;
+      margin-top: auto; /* Push to bottom */
       padding-top: 10px;
       border-top: 1px solid var(--gray-light);
     }
 
     .craving-tags {
       display: flex;
+      flex-wrap: wrap; /* Allow tags to wrap */
       gap: 5px;
     }
 
@@ -460,35 +519,41 @@
       border-radius: 4px;
       font-size: 0.75rem;
       font-weight: 500;
+      white-space: nowrap; /* Prevent tags breaking mid-word */
     }
 
     .craving-rating {
       color: var(--secondary-color);
       display: flex;
       align-items: center;
-      font-weight: 500;
+      font-weight: 600; /* Make rating stand out */
+      font-size: 0.9rem;
+    }
+    .craving-rating.recommendation { /* Style for recommendation match */
+        color: var(--primary-color);
     }
 
     .craving-rating i {
       margin-right: 4px;
+      font-size: 0.85rem; /* Adjust icon size */
     }
 
     /* --- Recommendation Section --- */
-    .recommendations {
-      background-color: var(--white);
-      border-radius: 12px;
-      box-shadow: var(--shadow-md);
-      padding: 30px;
-      margin-bottom: 40px;
-    }
-
     .recommendation-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start; /* Align items to top */
       margin-bottom: 20px;
       flex-wrap: wrap;
       gap: 15px;
+    }
+    .recommendation-header .section-title {
+        text-align: left; /* Align title left */
+        margin-bottom: 0;
+    }
+    .recommendation-header .section-title h3::after {
+        left: 0; /* Align underline left */
+        transform: none;
     }
 
     .see-all {
@@ -499,11 +564,14 @@
       border-radius: 5px;
       text-decoration: none;
       transition: var(--transition);
+      font-weight: 500;
+      margin-top: 5px; /* Add some space */
     }
 
     .see-all:hover {
       background-color: var(--primary-dark);
       transform: translateY(-3px);
+      box-shadow: var(--shadow-sm);
     }
 
     /* --- Footer --- */
@@ -526,7 +594,8 @@
 
     .footer-content {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      /* Responsive footer columns */
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 40px;
       margin-bottom: 50px;
     }
@@ -534,20 +603,27 @@
     .footer-column h3 {
       color: var(--primary-color);
       margin-bottom: 20px;
+      font-size: 1.4rem; /* Slightly smaller footer headings */
       padding-bottom: 10px;
+      position: relative; /* Needed for ::after */
     }
 
     .footer-column h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
       left: 0;
-      transform: none;
       width: 50px;
+      height: 3px;
+      background: var(--secondary-color);
     }
 
     .footer-about {
       margin-top: 15px;
-      color: #ddd;
+      color: #bbb; /* Slightly lighter text */
       font-size: 0.95rem;
       margin-bottom: 20px;
+      line-height: 1.7;
     }
 
     .footer-links {
@@ -556,6 +632,14 @@
 
     .footer-links li {
       margin-bottom: 12px;
+      display: flex; /* Align icons and text */
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-links li i {
+        color: var(--primary-color); /* Color icons */
+        width: 16px; /* Consistent icon width */
+        text-align: center;
     }
 
     .footer-links a {
@@ -566,15 +650,17 @@
 
     .footer-links a:hover {
       color: var(--primary-color);
+      text-decoration: underline;
     }
 
     .social-links {
       display: flex;
       gap: 15px;
+      margin-top: 15px; /* Add space above social links */
     }
 
     .social-icon {
-      font-size: 1.3rem;
+      font-size: 1.2rem; /* Slightly smaller icons */
       color: #ddd;
       transition: var(--transition);
       display: flex;
@@ -584,12 +670,33 @@
       height: 40px;
       border-radius: 50%;
       background-color: rgba(255,255,255,0.1);
+      text-decoration: none; /* Remove underline from icon links */
     }
 
     .social-icon:hover {
       color: var(--white);
       background-color: var(--primary-color);
-      transform: translateY(-3px);
+      transform: translateY(-3px) scale(1.1); /* Add scale effect */
+    }
+
+    .app-badges {
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column; /* Stack badges */
+        gap: 10px;
+    }
+    .app-badges a {
+        display: inline-block; /* Prevent extra space */
+    }
+    .app-badges img {
+        height: 45px; /* Adjust height */
+        width: auto; /* Maintain aspect ratio */
+        transition: var(--transition);
+        border-radius: 5px; /* Slightly rounded corners */
+    }
+    .app-badges img:hover {
+        opacity: 0.85;
+        transform: scale(1.03);
     }
 
     .copyright {
@@ -597,18 +704,32 @@
       padding-top: 20px;
       border-top: 1px solid #444;
       font-size: 0.9rem;
-      color: #ddd;
+      color: #aaa; /* Lighter copyright text */
     }
 
     /* --- Responsive Styles --- */
+    @media (max-width: 992px) {
+        .cravings-grid {
+            /* Adjust columns for tablets */
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        }
+    }
+
     @media (max-width: 768px) {
+      .container {
+          padding: 0 15px; /* Reduce padding on smaller screens */
+      }
+
+      h2 { font-size: 1.8rem; }
+      h3 { font-size: 1.5rem; }
+
       .menu-toggle {
-        display: flex;
+        display: flex; /* Show hamburger menu */
       }
 
       .nav-links {
-        position: fixed;
-        top: 70px;
+        position: absolute; /* Change to absolute */
+        top: 100%; /* Position below header */
         left: 0;
         width: 100%;
         flex-direction: column;
@@ -616,21 +737,27 @@
         background-color: var(--white);
         box-shadow: var(--shadow-md);
         padding: 0;
-        max-height: 0;
+        max-height: 0; /* Collapsed by default */
         overflow: hidden;
-        transition: max-height 0.3s ease;
+        transition: max-height 0.4s ease-out; /* Smoother transition */
       }
 
       .nav-links.active {
-        max-height: 300px;
+        max-height: 300px; /* Adjust as needed */
+        border-top: 1px solid var(--gray-light);
       }
 
       .nav-links a {
         padding: 15px 20px;
         border-bottom: 1px solid var(--gray-light);
         width: 100%;
-        text-align: center;
+        text-align: left; /* Align text left */
       }
+      .nav-links a:last-child {
+        border-bottom: none;
+      }
+      .nav-links a::after { display: none; } /* Hide underline on mobile */
+      .nav-links a:hover { background-color: var(--gray-light); }
 
       .profile-header {
         flex-direction: column;
@@ -638,22 +765,62 @@
         text-align: center;
       }
 
-      .profile-stats {
-        flex-wrap: wrap;
-        justify-content: center;
+      .profile-info {
+          width: 100%; /* Take full width */
       }
+
+      .profile-stats {
+        justify-content: center; /* Center stats */
+        gap: 10px;
+      }
+      .stat-item {
+          min-width: 80px;
+          padding: 8px 12px;
+      }
+      .stat-number { font-size: 1.2rem; }
+      .stat-label { font-size: 0.75rem; }
 
       .cravings-grid {
+        /* Single column on mobile */
         grid-template-columns: 1fr;
+      }
+
+      .recommendation-header {
+          flex-direction: column;
+          align-items: center; /* Center header content */
+          text-align: center;
+      }
+      .recommendation-header .section-title {
+          text-align: center;
+          width: 100%;
+      }
+      .recommendation-header .section-title h3::after {
+          left: 50%;
+          transform: translateX(-50%);
+      }
+      .see-all {
+          margin-top: 15px;
+      }
+
+      .footer-content {
+          grid-template-columns: 1fr; /* Stack footer columns */
+          text-align: center;
+      }
+      .footer-column h3::after {
+          left: 50%;
+          transform: translateX(-50%);
+      }
+      .footer-links li {
+          justify-content: center;
+      }
+      .social-links {
+          justify-content: center;
+      }
+      .app-badges {
+          align-items: center; /* Center app badges */
       }
     }
 
-    /* Ensure images cover their container */
-    .craving-img img {
-        object-fit: cover;  /* This is the key */
-        width: 100%;
-        height: 100%;
-    }
   </style>
 </head>
 <body>
@@ -665,21 +832,23 @@
       <div class="loading-progress">
         <div class="loading-bar" id="loading-bar"></div>
       </div>
-      <div class="loading-steps">
+      <div class="loading-progress-text">
         <div id="progress-percent">0%</div>
         <div>100%</div>
       </div>
-      <div class="loading-step">
-        <div class="step-icon"><i class="fas fa-utensils"></i></div>
-        <div class="step-text">Analyzing past orders</div>
-      </div>
-      <div class="loading-step">
-        <div class="step-icon"><i class="fas fa-chart-line"></i></div>
-        <div class="step-text">Identifying taste patterns</div>
-      </div>
-      <div class="loading-step">
-        <div class="step-icon"><i class="fas fa-brain"></i></div>
-        <div class="step-text">Generating personalized recommendations</div>
+      <div class="loading-steps-container">
+        <div class="loading-step">
+          <div class="step-icon"><i class="fas fa-utensils"></i></div>
+          <div class="step-text">Analyzing past orders</div>
+        </div>
+        <div class="loading-step">
+          <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+          <div class="step-text">Identifying taste patterns</div>
+        </div>
+        <div class="loading-step">
+          <div class="step-icon"><i class="fas fa-brain"></i></div>
+          <div class="step-text">Generating personalized recommendations</div>
+        </div>
       </div>
     </div>
   </div>
@@ -690,18 +859,18 @@
         <a href="index.html" class="logo">
           <i class="fa-solid fa-burger"></i> Nom<span>Nom</span>
         </a>
-        <div class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
+        <div class="menu-toggle" id="menu-toggle">
           <span></span>
           <span></span>
           <span></span>
         </div>
-        <div class="nav-links">
-          <a href="index.html">Home</a>
-          <a href="#profile">My Profile</a>
-          <a href="#cravings">My Cravings</a>
-          <a href="#recommendations">Recommendations</a>
-          <a href="#contact">Contact</a>
-        </div>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#profile">My Profile</a></li>
+          <li><a href="#cravings">My Cravings</a></li>
+          <li><a href="#recommendations">Recommendations</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
       </nav>
     </div>
   </header>
@@ -711,7 +880,8 @@
       <section id="profile" class="profile-section">
         <div class="profile-header">
           <div class="profile-image">
-            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=100&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="User Profile">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=120&h=120&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="User Profile Picture Alex Johnson"
+                 onerror="this.onerror=null; this.src='https://placehold.co/120x120/FF6B6B/FFFFFF?text=User';">
           </div>
           <div class="profile-info">
             <h2>Alex Johnson</h2>
@@ -736,7 +906,7 @@
             </div>
           </div>
         </div>
-        <div>
+        <div class="taste-profile-content">
           <h3>Taste Profile</h3>
           <p>Based on your eating history, you enjoy a balance of sweet and savory dishes with a preference for international cuisines. You tend to prefer medium spicy foods and have shown interest in trying new culinary experiences.</p>
         </div>
@@ -749,23 +919,24 @@
         </div>
 
         <div class="cravings-filter">
-          <button class="filter-btn active">All</button>
-          <button class="filter-btn">Asian</button>
-          <button class="filter-btn">Italian</button>
-          <button class="filter-btn">Mexican</button>
-          <button class="filter-btn">Desserts</button>
-          <button class="filter-btn">Comfort Food</button>
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="asian">Asian</button>
+          <button class="filter-btn" data-filter="italian">Italian</button>
+          <button class="filter-btn" data-filter="mexican">Mexican</button>
+          <button class="filter-btn" data-filter="dessert">Desserts</button>
+          <button class="filter-btn" data-filter="comfort">Comfort Food</button>
         </div>
 
         <div class="cravings-grid">
-          <div class="craving-card">
+          <div class="craving-card" data-category="asian seafood">
             <div class="craving-img">
-              <img src="https://images.unsplash.com/photo-1614777774511-75e115a4a202?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Sushi Platter">
+              <img src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Sushi Platter"
+                   onerror="this.onerror=null; this.src='https://placehold.co/300x180/CCCCCC/FFFFFF?text=Sushi';">
               <div class="craving-date">Apr 02, 2025</div>
             </div>
             <div class="craving-content">
               <div class="craving-title">Sushi Platter</div>
-              <p>Premium selection of sashimi and signature rolls</p>
+              <p class="craving-description">Premium selection of sashimi and signature rolls.</p>
               <div class="craving-details">
                 <div class="craving-tags">
                   <span class="craving-tag">Asian</span>
@@ -778,14 +949,15 @@
             </div>
           </div>
 
-          <div class="craving-card">
+          <div class="craving-card" data-category="italian comfort">
             <div class="craving-img">
-              <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Margherita Pizza">
+              <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Margherita Pizza"
+                   onerror="this.onerror=null; this.src='https://placehold.co/300x180/CCCCCC/FFFFFF?text=Pizza';">
               <div class="craving-date">Mar 28, 2025</div>
             </div>
             <div class="craving-content">
               <div class="craving-title">Margherita Pizza</div>
-              <p>Classic wood-fired pizza with fresh basil</p>
+              <p class="craving-description">Classic wood-fired pizza with fresh basil and mozzarella.</p>
               <div class="craving-details">
                 <div class="craving-tags">
                   <span class="craving-tag">Italian</span>
@@ -798,14 +970,15 @@
             </div>
           </div>
 
-          <div class="craving-card">
+          <div class="craving-card" data-category="mexican spicy">
             <div class="craving-img">
-              <img src="https://images.unsplash.com/photo-1614777774511-75e115a4a202?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Beef Tacos">
+              <img src="https://images.unsplash.com/photo-1565299712413-8af9157f0174?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Beef Tacos"
+                   onerror="this.onerror=null; this.src='https://placehold.co/300x180/CCCCCC/FFFFFF?text=Tacos';">
               <div class="craving-date">Mar 22, 2025</div>
             </div>
             <div class="craving-content">
               <div class="craving-title">Beef Tacos</div>
-              <p>Street-style tacos with homemade salsa</p>
+              <p class="craving-description">Street-style tacos with seasoned beef and homemade salsa.</p>
               <div class="craving-details">
                 <div class="craving-tags">
                   <span class="craving-tag">Mexican</span>
@@ -818,14 +991,15 @@
             </div>
           </div>
 
-          <div class="craving-card">
+          <div class="craving-card" data-category="dessert italian">
             <div class="craving-img">
-              <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Tiramisu">
+              <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Tiramisu"
+                   onerror="this.onerror=null; this.src='https://placehold.co/300x180/CCCCCC/FFFFFF?text=Tiramisu';">
               <div class="craving-date">Mar 19, 2025</div>
             </div>
             <div class="craving-content">
               <div class="craving-title">Tiramisu</div>
-              <p>Classic Italian dessert with espresso and mascarpone</p>
+              <p class="craving-description">Classic Italian dessert with espresso and mascarpone cream.</p>
               <div class="craving-details">
                 <div class="craving-tags">
                   <span class="craving-tag">Dessert</span>
@@ -838,14 +1012,15 @@
             </div>
           </div>
 
-          <div class="craving-card">
+          <div class="craving-card" data-category="american comfort">
             <div class="craving-img">
-              <img src="https://images.unsplash.com/photo-1568901349372-17f2e1fa56c1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Beef Burger">
+              <img src="https://images.unsplash.com/photo-1568901349372-17f2e1fa56c1?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Gourmet Burger"
+                   onerror="this.onerror=null; this.src='https://placehold.co/300x180/CCCCCC/FFFFFF?text=Burger';">
               <div class="craving-date">Mar 15, 2025</div>
             </div>
             <div class="craving-content">
               <div class="craving-title">Gourmet Burger</div>
-              <p>Angus beef with caramelized onions and truffle aioli</p>
+              <p class="craving-description">Angus beef with caramelized onions and truffle aioli.</p>
               <div class="craving-details">
                 <div class="craving-tags">
                   <span class="craving-tag">American</span>
@@ -858,14 +1033,15 @@
             </div>
           </div>
 
-          <div class="craving-card">
+          <div class="craving-card" data-category="asian noodles">
             <div class="craving-img">
-              <img src="https://images.unsplash.com/photo-1552566623-289c14846527?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Pad Thai">
+              <img src="https://images.unsplash.com/photo-1552566623-289c14846527?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Pad Thai"
+                   onerror="this.onerror=null; this.src='https://placehold.co/300x180/CCCCCC/FFFFFF?text=Pad+Thai';">
               <div class="craving-date">Mar 10, 2025</div>
             </div>
             <div class="craving-content">
               <div class="craving-title">Pad Thai</div>
-              <p>Classic Thai noodles with shrimp and peanuts</p>
+              <p class="craving-description">Classic Thai stir-fried noodles with shrimp and peanuts.</p>
               <div class="craving-details">
                 <div class="craving-tags">
                   <span class="craving-tag">Asian</span>
@@ -878,14 +1054,15 @@
             </div>
           </div>
 
-          <div class="craving-card">
+          <div class="craving-card" data-category="dessert italian">
             <div class="craving-img">
-              <img src="https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Gelato">
+              <img src="https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Artisanal Gelato"
+                   onerror="this.onerror=null; this.src='https://placehold.co/300x180/CCCCCC/FFFFFF?text=Gelato';">
               <div class="craving-date">Mar 7, 2025</div>
             </div>
             <div class="craving-content">
               <div class="craving-title">Artisanal Gelato</div>
-              <p>Pistachio and dark chocolate combination</p>
+              <p class="craving-description">Pistachio and dark chocolate combination.</p>
               <div class="craving-details">
                 <div class="craving-tags">
                   <span class="craving-tag">Dessert</span>
@@ -898,14 +1075,15 @@
             </div>
           </div>
 
-          <div class="craving-card">
+          <div class="craving-card" data-category="asian comfort">
             <div class="craving-img">
-              <img src="https://images.unsplash.com/photo-1618994819442-f51198531475?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Ramen">
+              <img src="https://images.unsplash.com/photo-1618994819442-f51198531475?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Tonkotsu Ramen"
+                   onerror="this.onerror=null; this.src='https://placehold.co/300x180/CCCCCC/FFFFFF?text=Ramen';">
               <div class="craving-date">Mar 3, 2025</div>
             </div>
             <div class="craving-content">
               <div class="craving-title">Tonkotsu Ramen</div>
-              <p>Rich pork broth with chashu and soft-boiled egg</p>
+              <p class="craving-description">Rich pork broth with chashu pork and soft-boiled egg.</p>
               <div class="craving-details">
                 <div class="craving-tags">
                   <span class="craving-tag">Asian</span>
@@ -922,32 +1100,74 @@
 
       <section id="recommendations" class="recommendations">
         <div class="recommendation-header">
-          <div class="section-title" style="margin-bottom: 0;">
+          <div class="section-title">
             <h3>Recommended For You</h3>
             <p>Based on your taste profile and past cravings</p>
           </div>
-          <a href="#" class="see-all">See All</a>
+          <a href="#" class="see-all">See All Recommendations</a>
         </div>
 
         <div class="cravings-grid">
-          <div class="craving-card">
+          <div class="craving-card" data-category="indian spicy">
             <div class="craving-img">
-              <img src="https://images.unsplash.com/photo-1595760783925-f9fc18616690?q=80&w=2078&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Biryani">
+              <img src="https://images.unsplash.com/photo-1595760783925-f9fc18616690?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Lamb Biryani"
+                   onerror="this.onerror=null; this.src='https://placehold.co/300x180/CCCCCC/FFFFFF?text=Biryani';">
             </div>
             <div class="craving-content">
               <div class="craving-title">Lamb Biryani</div>
-              <p>Aromatic basmati rice with tender lamb and spices</p>
+              <p class="craving-description">Aromatic basmati rice layered with tender lamb and spices.</p>
               <div class="craving-details">
                 <div class="craving-tags">
                   <span class="craving-tag">Indian</span>
                   <span class="craving-tag">Spicy</span>
                 </div>
-                <div class="craving-rating">
+                <div class="craving-rating recommendation">
                   <i class="fas fa-thumbs-up"></i> 96% match
                 </div>
               </div>
             </div>
           </div>
+
+          <div class="craving-card" data-category="italian pasta">
+            <div class="craving-img">
+              <img src="https://images.unsplash.com/photo-1608897013036-b945739114a8?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Carbonara Pasta"
+                   onerror="this.onerror=null; this.src='https://placehold.co/300x180/CCCCCC/FFFFFF?text=Carbonara';">
+            </div>
+            <div class="craving-content">
+              <div class="craving-title">Classic Carbonara</div>
+              <p class="craving-description">Authentic Italian pasta with guanciale, eggs, and pecorino.</p>
+              <div class="craving-details">
+                <div class="craving-tags">
+                  <span class="craving-tag">Italian</span>
+                  <span class="craving-tag">Pasta</span>
+                </div>
+                <div class="craving-rating recommendation">
+                  <i class="fas fa-thumbs-up"></i> 94% match
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="craving-card" data-category="dessert french">
+            <div class="craving-img">
+              <img src="https://images.unsplash.com/photo-1587179626-617146438f6a?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Chocolate Lava Cake"
+                   onerror="this.onerror=null; this.src='https://placehold.co/300x180/CCCCCC/FFFFFF?text=Lava+Cake';">
+            </div>
+            <div class="craving-content">
+              <div class="craving-title">Chocolate Lava Cake</div>
+              <p class="craving-description">Warm, decadent chocolate cake with a molten center.</p>
+              <div class="craving-details">
+                <div class="craving-tags">
+                  <span class="craving-tag">Dessert</span>
+                  <span class="craving-tag">Chocolate</span>
+                </div>
+                <div class="craving-rating recommendation">
+                  <i class="fas fa-thumbs-up"></i> 92% match
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
     </div>
@@ -961,13 +1181,13 @@
             <i class="fa-solid fa-burger"></i> Nom<span>Nom</span>
           </a>
           <p class="footer-about">
-            Your personal guide to exploring and enjoying the best culinary experiences.
+            Your personal guide to exploring and enjoying the best culinary experiences around you. Discover, rate, and get recommendations.
           </p>
           <div class="social-links">
-            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
           </div>
         </div>
         <div class="footer-column">
@@ -981,25 +1201,33 @@
         <div class="footer-column">
           <h3>Quick Links</h3>
           <ul class="footer-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#profile">Profile</a></li>
-            <li><a href="#cravings">Cravings</a></li>
-            <li><a href="#recommendations">Recommendations</a></li>
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="#">Privacy Policy</a></li>
+            <li><i class="fas fa-angle-right"></i><a href="#">Home</a></li>
+            <li><i class="fas fa-angle-right"></i><a href="#profile">Profile</a></li>
+            <li><i class="fas fa-angle-right"></i><a href="#cravings">Cravings</a></li>
+            <li><i class="fas fa-angle-right"></i><a href="#recommendations">Recommendations</a></li>
+            <li><i class="fas fa-angle-right"></i><a href="#">Terms of Service</a></li>
+            <li><i class="fas fa-angle-right"></i><a href="#">Privacy Policy</a></li>
           </ul>
         </div>
         <div class="footer-column">
           <h3>Our App</h3>
           <p>Download our app for the best experience!</p>
           <div class="app-badges">
-            <a href="#"><img src="https://via.placeholder.com/150x50/007AFF/FFFFFF?text=App+Store" alt="App Store"></a>
-            <a href="#"><img src="https://via.placeholder.com/150x50/007AFF/FFFFFF?text=Google+Play" alt="Google Play"></a>
+            <a href="#" aria-label="Download on the App Store">
+              <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                   alt="Download on the App Store badge"
+                   onerror="this.onerror=null; this.src='https://placehold.co/135x45/000000/FFFFFF?text=App+Store';">
+            </a>
+            <a href="#" aria-label="Get it on Google Play">
+              <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                   alt="Get it on Google Play badge"
+                   onerror="this.onerror=null; this.src='https://placehold.co/150x45/000000/FFFFFF?text=Google+Play';">
+            </a>
           </div>
         </div>
       </div>
       <div class="copyright">
-        &copy; 2025 NomNom. All rights reserved.
+        &copy; 2025 NomNom. All rights reserved. Designed with <i class="fas fa-heart" style="color: var(--primary-color);"></i>.
       </div>
     </div>
   </footer>
@@ -1009,8 +1237,11 @@
     const loadingPopup = document.getElementById("loading-popup");
     const loadingBar = document.getElementById("loading-bar");
     const progressPercent = document.getElementById("progress-percent");
+    const menuToggle = document.getElementById("menu-toggle");
+    const navLinks = document.getElementById("nav-links");
     let progress = 0;
 
+    // Header scroll effect
     window.addEventListener("scroll", () => {
       if (window.scrollY > 50) {
         header.classList.add("scrolled");
@@ -1019,8 +1250,11 @@
       }
     });
 
+    // Loading animation simulation
     document.addEventListener("DOMContentLoaded", () => {
       loadingPopup.classList.add("show");
+      document.body.classList.add("no-scroll"); // Prevent scrolling during load
+
       const interval = setInterval(() => {
         progress += Math.floor(Math.random() * 10) + 5;
         if (progress > 100) progress = 100;
@@ -1031,11 +1265,55 @@
           clearInterval(interval);
           setTimeout(() => {
             loadingPopup.classList.remove("show");
-            document.body.classList.remove("no-scroll");
-          }, 1000);
+            document.body.classList.remove("no-scroll"); // Allow scrolling after load
+          }, 800); // Slightly longer delay
         }
-      }, 300);
+      }, 250); // Faster interval
     });
+
+    // Mobile menu toggle
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+            // Optional: Add animation to hamburger icon itself
+            menuToggle.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked (optional)
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                }
+            });
+        });
+    }
+
+    // Filter functionality (basic example)
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const cravingCards = document.querySelectorAll('.cravings-grid .craving-card'); // Target only cards in cravings grid
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Update active button style
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            const filter = button.getAttribute('data-filter');
+
+            // Show/hide cards based on filter
+            cravingCards.forEach(card => {
+                const categories = card.getAttribute('data-category');
+                if (filter === 'all' || (categories && categories.includes(filter))) {
+                    card.style.display = 'flex'; // Or 'block' if you prefer
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+
   </script>
 </body>
 </html>
