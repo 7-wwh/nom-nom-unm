@@ -358,7 +358,7 @@
       opacity: 0; /* Start hidden for animation */
     }
 
-    /* Loading Overlay (Used for initial load and submit) */
+    /* Loading Overlay (Only used for submit animation now) */
     #loading-overlay {
       background: linear-gradient(135deg, #f7fff7, #e0f7fa); /* Light gradient */
     }
@@ -417,34 +417,6 @@
       color: var(--dark-color);
       max-width: 90%;
       transition: opacity 0.5s ease;
-    }
-
-    /* Progress bar area (used during initial load) */
-    .loading-info {
-      display: flex; /* Initially flex, can be hidden later */
-      gap: 10px;
-      margin-top: 20px;
-      align-items: center;
-      background: rgba(255,255,255,0.7);
-      padding: 10px 15px;
-      border-radius: 30px;
-      box-shadow: var(--shadow-md);
-    }
-
-    .loading-progress {
-      width: 200px;
-      height: 10px;
-      background: rgba(255,255,255,0.5);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .loading-bar {
-      height: 100%;
-      width: 0%; /* Starts at 0 */
-      background: var(--primary-color);
-      border-radius: 10px;
-      transition: width 0.3s ease;
     }
 
     /* --- Survey Container --- */
@@ -798,10 +770,10 @@
       <i class="fa-solid fa-utensils loader-icon"></i>
     </div>
     <div class="loading-message-container">
-      <div id="loadingMessage" class="animate__animated">Loading...</div>
+      <div id="loadingMessage" class="animate__animated"></div>
     </div>
-    <div class="loading-info" id="loadingInfo">
-      <div id="loadingProgressText">Analyzing...</div>
+    <div class="loading-info" id="loadingInfo" style="display: none;">
+      <div id="loadingProgressText"></div>
       <div class="loading-progress">
         <div class="loading-bar" id="loadingProgressBar"></div>
       </div>
@@ -966,12 +938,12 @@
     const helloText = document.getElementById("helloText");
     const helloSubtext = document.getElementById("helloSubtext");
 
+    // Loading overlay elements (used only for submit now)
     const loadingOverlay = document.getElementById("loading-overlay");
     const loadingMessage = document.getElementById("loadingMessage");
-    const loadingInfo = document.getElementById("loadingInfo"); // Container for progress bar stuff
-    const loadingProgressBar = document.getElementById("loadingProgressBar");
-    const loadingProgressText = document.getElementById("loadingProgressText");
+    const loadingInfo = document.getElementById("loadingInfo"); // Keep reference to hide it
 
+    // Survey elements
     const surveyContainer = document.getElementById("survey-container");
     const surveyForm = document.getElementById("surveyForm");
     const surveyProgress = document.getElementById("surveyProgress");
@@ -979,7 +951,7 @@
     const totalQuestionsSpan = document.getElementById("totalQuestions");
     const completionPercentSpan = document.getElementById("completionPercent");
     const mealTypeHeaderSpan = document.getElementById("mealTypeHeader");
-    const mealTypeTextSpans = document.querySelectorAll(".mealTypeText"); // Get all spans needing meal type text
+    const mealTypeTextSpans = document.querySelectorAll(".mealTypeText");
     const submitButton = document.getElementById("submitSurvey");
     const resultsPreview = document.getElementById("resultsPreview");
     const selectedPreferencesDiv = document.getElementById("selectedPreferences");
@@ -1015,7 +987,8 @@
     function updateProgressUI() {
         const percent = Math.round((answeredQuestions / totalQuestions) * 100);
         surveyProgress.style.width = `${percent}%`;
-        currentQuestionSpan.textContent = Math.min(answeredQuestions + 1, totalQuestions); // Show current question number (or total if all answered)
+        // Show current question number (or total if all answered)
+        currentQuestionSpan.textContent = Math.min(answeredQuestions + 1, totalQuestions);
         completionPercentSpan.textContent = percent;
     }
 
@@ -1023,8 +996,6 @@
     function checkCompletion() {
         const allAnswered = answeredQuestions === totalQuestions;
         submitButton.disabled = !allAnswered;
-        // submitButton.style.opacity = submitButton.disabled ? 0.6 : 1; // CSS handles this now
-        // submitButton.style.cursor = submitButton.disabled ? 'not-allowed' : 'pointer'; // CSS handles this
     }
 
     // Update the preview section with selected badges
@@ -1102,16 +1073,15 @@
       e.preventDefault(); // Prevent default GET navigation
 
       if (submitButton.disabled) {
-        // Optionally show a message, though button state should prevent this
         console.warn("Submit attempted while button is disabled.");
         return;
       }
 
       // --- Start Submit Animation ---
-      loadingMessage.textContent = "Finding your perfect meal..."; // Update loading message
-      loadingInfo.style.display = 'none'; // Hide the progress bar elements
+      loadingMessage.textContent = "Finding your perfect meal..."; // Set loading message
+      loadingInfo.style.display = 'none'; // Ensure progress bar elements are hidden
       loadingOverlay.style.display = "flex"; // Show the loading overlay
-      loadingMessage.classList.remove("animate__fadeOut"); // Ensure it's visible
+      loadingMessage.classList.remove("animate__fadeOut"); // Ensure it's visible if previously faded
       loadingMessage.classList.add("animate__fadeIn");
 
       // Build query string for GET request
@@ -1126,7 +1096,26 @@
 
     // --- Initial Setup & Flow ---
 
-    // 1. Hello Animation Sequence
+    // 1. Show the Survey Form directly after Hello animation
+    function showSurvey() {
+        // Set meal type based on time
+        const mealType = getMealType();
+        mealTypeHeaderSpan.textContent = mealType;
+        mealTypeTextSpans.forEach(span => {
+            span.textContent = mealType.toLowerCase(); // e.g., "your lunch?"
+        });
+
+        // Make survey visible with animation
+        surveyContainer.classList.add("visible"); // Triggers the CSS transition
+
+        // Initialize progress UI and check completion status (starts at 0/disabled)
+        updateProgressUI();
+        checkCompletion();
+        updateResultsPreview(); // Ensure preview is hidden initially
+    }
+
+
+    // 2. Hello Animation Sequence
     function startHelloAnimation() {
       // Fade in elements
       logoLarge.style.opacity = 1;
@@ -1142,93 +1131,17 @@
         helloText.classList.replace("animate__bounceIn", "animate__fadeOutUp");
         helloSubtext.classList.replace("animate__fadeInUp", "animate__fadeOutDown");
 
-        // After fade out animation completes (800ms), hide overlay and start loading
+        // After fade out animation completes (800ms), hide overlay and SHOW SURVEY
         setTimeout(() => {
           helloOverlay.style.display = "none";
-          startLoadingSequence();
+          // *** CHANGE: Directly show survey instead of loading sequence ***
+          showSurvey();
         }, 800); // Match Animate.css default duration
       }, 3000); // How long the "Hello" message stays visible
     }
 
-    // 2. Initial Loading Sequence (before survey)
-    function startLoadingSequence() {
-      loadingOverlay.style.display = "flex"; // Show loading overlay
-      loadingInfo.style.display = 'flex'; // Ensure progress bar is visible initially
-      const messages = [
-        { text: "Warming up the kitchen...", progress: 10 },
-        { text: "Checking today's specials...", progress: 30 },
-        { text: "Consulting the flavor oracle...", progress: 60 },
-        { text: "Finding your taste profile...", progress: 85 },
-        { text: "Ready for your preferences!", progress: 100 }
-      ];
-      let msgIndex = 0;
-      let progressInterval;
 
-      function showNextMessage() {
-        // Check if all messages are shown
-        if (msgIndex >= messages.length) {
-           clearInterval(progressInterval);
-          // End loading sequence after a brief pause
-          setTimeout(() => {
-             loadingMessage.classList.remove("animate__fadeIn");
-             loadingMessage.classList.add("animate__fadeOut");
-            // After fade out, hide loading overlay and show survey
-            setTimeout(() => {
-                 loadingOverlay.style.display = "none";
-                 showSurvey();
-             }, 500); // Wait for fade out animation
-           }, 800); // Brief pause on last message
-          return;
-         }
-
-        const currentMsg = messages[msgIndex];
-
-        // Fade out previous message (if not the first one)
-        if (msgIndex > 0) {
-            loadingMessage.classList.remove("animate__fadeIn");
-            loadingMessage.classList.add("animate__fadeOut");
-         }
-
-        // Update progress text (next to bar) immediately
-         loadingProgressText.textContent = currentMsg.text.split("...")[0];
-
-        // Animate progress bar width
-         loadingProgressBar.style.width = `${currentMsg.progress}%`;
-
-        // After a short delay (allowing fade-out), update and fade in the main message
-         setTimeout(() => {
-            loadingMessage.textContent = currentMsg.text;
-             loadingMessage.classList.remove("animate__fadeOut"); // Remove fadeOut before adding fadeIn
-            loadingMessage.classList.add("animate__fadeIn");
-             msgIndex++; // Move to the next message index
-         }, msgIndex > 0 ? 500 : 0); // No delay for the very first message fade-in
-      }
-
-      // Start the message sequence
-      loadingMessage.classList.add("animate__fadeIn"); // Initial fade-in for the message container
-      showNextMessage(); // Show the first message immediately
-      progressInterval = setInterval(showNextMessage, 1500); // Time between message updates
-    }
-
-    // 3. Show the Survey Form
-    function showSurvey() {
-        // Set meal type based on time
-        const mealType = getMealType();
-        mealTypeHeaderSpan.textContent = mealType;
-        mealTypeTextSpans.forEach(span => {
-            span.textContent = mealType.toLowerCase(); // e.g., "your lunch?"
-        });
-
-        // Make survey visible with animation
-        surveyContainer.classList.add("visible"); // This triggers the CSS transition
-
-        // Initialize progress UI and check completion status (starts at 0/disabled)
-        updateProgressUI();
-        checkCompletion();
-        updateResultsPreview(); // Ensure preview is hidden initially
-    }
-
-    // 4. Footer Animation on Scroll
+    // 3. Footer Animation on Scroll
     const footerObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -1245,7 +1158,7 @@
 
 
     // --- Start the entire page flow ---
-    startHelloAnimation();
+    startHelloAnimation(); // This now leads directly to showSurvey()
 
   });
 </script>
